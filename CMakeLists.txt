@@ -12,6 +12,8 @@ if (Json_ExternalTarget)
     set(TargetGroup   ${Json_TargetGroup})
 else()
     subdirs(CMake)
+    subdirs(Extern)
+
 
     set(TargetFolders FALSE)
     set(TargetName Json)
@@ -21,7 +23,7 @@ else()
 
 endif()
 
-subdirs(Source)
+subdirs(Json)
 
 if (Json_BUILD_TEST)
     set(BUILD_GMOCK   OFF CACHE BOOL "" FORCE)

@@ -1,5 +1,5 @@
 # -----------------------------------------------------------------------------
-#   Copyright (c) 2019 Charles Carley.
+#   Copyright (c) Charles Carley.
 #
 #   This software is provided 'as-is', without any express or implied
 # warranty. In no event will the authors be held liable for any damages
@@ -17,13 +17,48 @@
 #    misrepresented as being the original software.
 # 3. This notice may not be removed or altered from any source distribution.
 # ------------------------------------------------------------------------------
-set(TargetName_SOURCE 
-    Main.cpp)
+if (Json_ExternalTarget)
+    set(TargetFolders ${Json_TargetFolders})
+    set(TargetName    ${Json_TargetName})
+    set(TargetGroup   ${Json_TargetGroup})
+else()
+    set(TargetFolders FALSE)
+    set(TargetName Json)
+    unset(TargetGroup )
+endif()
 
-add_executable(
+
+
+set(TargetName_SOURCE 
+    skJsonArray.cpp
+    skJsonObject.cpp
+    skJsonParser.cpp
+    skJsonScanner.cpp
+    skJsonToken.cpp
+    skJsonType.cpp
+
+    skJsonBoolean.h
+    skJsonArray.h
+    skJsonDouble.h
+    skJsonInteger.h
+    skJsonObject.h
+    skJsonParser.h
+    skJsonPointer.h
+    skJsonScanner.h
+    skJsonString.h
+    skJsonToken.h
+    skJsonVisitor.h
+    skJsonType.h
+)
+
+include_directories(${Utils_INCLUDE} .)
+
+add_library(
     ${TargetName} 
     ${TargetName_SOURCE}
 )
+
+target_link_libraries( ${TargetName} ${Utils_LIBRARY})
 
 if (TargetFolders)
     set_target_properties(${TargetName} PROPERTIES FOLDER "${TargetGroup}")

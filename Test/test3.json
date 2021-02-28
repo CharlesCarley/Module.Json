@@ -1,0 +1,116 @@
+[
+  {
+    "A": "String",
+    "B": null,
+    "C": true,
+    "D": false,
+    "X": 1.0,
+    "Y": 0.0,
+    "Z": 0.0,
+    "E": [
+      {
+        "A": "String",
+        "B": null,
+        "C": true,
+        "D": false,
+        "X": 1.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      {
+        "A": "String",
+        "B": null,
+        "C": true,
+        "D": false,
+        "X": 1.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      {
+        "A": "String",
+        "B": null,
+        "C": true,
+        "D": false,
+        "X": 1.0,
+        "Y": 0.0,
+        "Z": 0.0
+      }
+    ]
+  },
+  {
+    "A": "String",
+    "B": null,
+    "C": true,
+    "D": false,
+    "X": 1.0,
+    "Y": 0.0,
+    "Z": 0.0,
+    "E": [
+      {
+        "A": "String",
+        "B": null,
+        "C": true,
+        "D": false,
+        "X": 1.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      {
+        "A": "String",
+        "B": null,
+        "C": true,
+        "D": false,
+        "X": 1.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      {
+        "A": "String",
+        "B": null,
+        "C": true,
+        "D": false,
+        "X": 1.0,
+        "Y": 0.0,
+        "Z": 0.0
+      }
+    ]
+  },
+  {
+    "A": "String",
+    "B": null,
+    "C": true,
+    "D": false,
+    "X": 1.0,
+    "Y": 0.0,
+    "Z": 0.0,
+    "E": [
+      {
+        "A": "String",
+        "B": null,
+        "C": true,
+        "D": false,
+        "X": 1.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      {
+        "A": "String",
+        "B": null,
+        "C": true,
+        "D": false,
+        "X": 1.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      {
+        "A": "String",
+        "B": null,
+        "C": true,
+        "D": false,
+        "X": 1.0,
+        "Y": 0.0,
+        "Z": 0.0
+      }
+    ]
+  }
+]

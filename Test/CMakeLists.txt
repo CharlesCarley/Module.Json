@@ -1,6 +1,6 @@
 # -----------------------------------------------------------------------------
 #
-#   Copyright (c) Charles Carley.
+#   Copyright (c) 2019 Charles Carley.
 #
 #   This software is provided 'as-is', without any express or implied
 # warranty. In no event will the authors be held liable for any damages
@@ -20,29 +20,27 @@
 # ------------------------------------------------------------------------------
 set(TestTargetName ${TargetName}Test)
 
+set(TestDirectory ${Json_SOURCE_DIR}/Test)
+configure_file(${Json_SOURCE_DIR}/CMake/TestConfig.h.in  
+            ${Json_BINARY_DIR}/TestConfig.h)
+
+
 set(TestTarget_SOURCE
+    ${Json_BINARY_DIR}/TestConfig.h
     Test1.cpp
+    test2.json
+    test3.json
+    test4.json
 )
 
-include_directories(. googletest)
+include_directories(. googletest ../ ${Utils_INCLUDE} ${Json_BINARY_DIR})
 
 add_executable(
     ${TestTargetName}
     ${TestTarget_SOURCE}
 )
-target_link_libraries(${TestTargetName} gtest_main)
+target_link_libraries(${TestTargetName} Json Utils gtest_main)
 
 if (TargetFolders)
     set_target_properties(${TargetName} PROPERTIES FOLDER "${TargetGroup}")
-endif()
-
-
-if (Json_AUTO_RUN_TEST)
-
-   add_custom_command(TARGET 
-        ${TestTargetName} POST_BUILD
-        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-        COMMAND  $<TARGET_FILE:${TestTargetName}>
-    )
-        
 endif()
