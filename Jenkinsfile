@@ -19,13 +19,6 @@ pipeline {
             }
         }
 
-        stage('Test Project') {
-            steps {
-                sh script: './Source/Json > out.ans'
-                sh script: 'diff out.ans Test/inp.ans'
-            }
-        }
-
         stage('Finalize') {
             steps {
                 deleteDir()
