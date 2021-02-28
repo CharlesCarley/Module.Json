@@ -44,3 +44,16 @@ target_link_libraries(${TestTargetName} Json Utils gtest_main)
 if (TargetFolders)
     set_target_properties(${TargetName} PROPERTIES FOLDER "${TargetGroup}")
 endif()
+
+
+
+if (Json_AUTO_RUN_TEST)
+
+   add_custom_command(TARGET 
+        ${TestTargetName} POST_BUILD
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+        COMMAND  $<TARGET_FILE:${TestTargetName}>
+    )
+        
+endif()
+
