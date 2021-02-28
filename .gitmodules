@@ -2,5 +2,5 @@
 	path = Extern/Utils
 	url = https://github.com/CharlesCarley/Utils.git
 [submodule "Test/googletest"]
-	path = test/googletest
+	path = Test/googletest
 	url = https://github.com/CharlesCarley/googletest.git
