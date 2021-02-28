@@ -1,4 +1,4 @@
-# Template
+# Json
 
 A sub-module template repository.
 
@@ -96,5 +96,5 @@ Optional defines.
 
 | Option                 | Description                         | Default |
 |:-----------------------|:------------------------------------|:-------:|
-| Template_BUILD_TEST    | Build the unit test program.        |   OFF   |
-| Template_AUTO_RUN_TEST | Automatically run the test program. |   OFF   |
+| Json_BUILD_TEST    | Build the unit test program.        |   OFF   |
+| Json_AUTO_RUN_TEST | Automatically run the test program. |   OFF   |
