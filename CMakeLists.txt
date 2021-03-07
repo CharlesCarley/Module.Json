@@ -26,6 +26,9 @@ endif()
 subdirs(Json)
 
 if (Json_BUILD_TEST)
+    set(GTEST_INCLUDE ${Json_SOURCE_DIR}/Test/googletest/googletest/include)
+    set(GTEST_LIBRARY gtest_main)
+
     set(BUILD_GMOCK   OFF CACHE BOOL "" FORCE)
     set(INSTALL_GTEST OFF CACHE BOOL "" FORCE)
 

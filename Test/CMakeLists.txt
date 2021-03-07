@@ -18,7 +18,7 @@
 #    misrepresented as being the original software.
 # 3. This notice may not be removed or altered from any source distribution.
 # ------------------------------------------------------------------------------
-set(TestTargetName ${TargetName}Test)
+set(TestTargetName JsonTest)
 
 set(TestDirectory ${Json_SOURCE_DIR}/Test)
 configure_file(${Json_SOURCE_DIR}/CMake/TestConfig.h.in  
@@ -33,17 +33,14 @@ set(TestTarget_SOURCE
     test4.json
 )
 
-include_directories(. googletest ../ ${Utils_INCLUDE} ${Json_BINARY_DIR})
+include_directories(. ${GTEST_INCLUDE} ../ ${Utils_INCLUDE} ${Json_BINARY_DIR})
 
 add_executable(
     ${TestTargetName}
     ${TestTarget_SOURCE}
 )
-target_link_libraries(${TestTargetName} Json Utils gtest_main)
-
-if (TargetFolders)
-    set_target_properties(${TargetName} PROPERTIES FOLDER "${TargetGroup}")
-endif()
+target_link_libraries(${TestTargetName} Json ${Utils_LIBRARY} ${GTEST_LIBRARY})
+set_target_properties(${TestTargetName} PROPERTIES FOLDER "Units")
 
 
 
