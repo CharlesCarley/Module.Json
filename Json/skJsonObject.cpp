@@ -63,3 +63,30 @@ void skJsonObject::getValueString(skString& dest, const skString& key, const skS
     else
         dest.assign(def);
 }
+
+void skJsonObject::getValueInt(SKint64& dest, const skString& key, const SKint64& def)
+{
+    const SKsize pos = m_dictionary.find(key);
+    if (pos != SK_NPOS)
+        dest = m_dictionary.at(pos)->getInteger64(def);
+    else
+        dest = def;
+}
+
+void skJsonObject::getValueInt(SKint32& dest, const skString& key, const SKint32& def)
+{
+    const SKsize pos = m_dictionary.find(key);
+    if (pos != SK_NPOS)
+        dest = (SKint32)m_dictionary.at(pos)->getInteger64((SKint64)def);
+    else
+        dest = def;
+}
+
+void skJsonObject::getValueInt(SKint16& dest, const skString& key, const SKint16& def)
+{
+    const SKsize pos = m_dictionary.find(key);
+    if (pos != SK_NPOS)
+        dest = (SKint16)m_dictionary.at(pos)->getInteger64((SKint64)def);
+    else
+        dest = def;
+}

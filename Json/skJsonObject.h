@@ -69,10 +69,40 @@ public:
     /// <summary>
     /// Gets the requested string from the dictionary
     /// </summary>
-    /// <param name="key">the key to get</param>
-    /// <param name="def">the default value if the key is not found.</param>
-    /// <returns>the value for the requested key otherwise def</returns>
+    /// <param name="dest">The destination storage variable.</param>
+    /// <param name="key">The key to get</param>
+    /// <param name="def">The default value if the key is not found.</param>
+    /// <returns>The value for the requested key otherwise def</returns>
     void getValueString(skString& dest, const skString& key, const skString& def = "");
+
+
+    /// <summary>
+    /// Gets the requested signed 64-bit integer from the dictionary
+    /// </summary>
+    /// <param name="dest">The destination storage variable.</param>
+    /// <param name="key">The key to get</param>
+    /// <param name="def">The default value if the key is not found.</param>
+    /// <returns>The value for the requested key otherwise def</returns>
+    void getValueInt(SKint64& dest, const skString& key, const SKint64& def = -1);
+
+    /// <summary>
+    /// Gets the requested signed 32-bit integer from the dictionary
+    /// </summary>
+    /// <param name="dest">The destination storage variable.</param>
+    /// <param name="key">The key to get</param>
+    /// <param name="def">The default value if the key is not found.</param>
+    /// <returns>The value for the requested key otherwise def</returns>
+    void getValueInt(SKint32& dest, const skString& key, const SKint32& def = -1);
+
+
+    /// <summary>
+    /// Gets the requested signed 32-bit integer from the dictionary
+    /// </summary>
+    /// <param name="dest">The destination storage variable.</param>
+    /// <param name="key">The key to get</param>
+    /// <param name="def">The default value if the key is not found.</param>
+    /// <returns>The value for the requested key otherwise def</returns>
+    void getValueInt(SKint16& dest, const skString& key, const SKint16& def = -1);
 };
 
 #endif  //_skJsonObject_h_

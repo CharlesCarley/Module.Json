@@ -107,6 +107,15 @@ public:
         return defaultValue;
     }
 
+    /// Converts the underlying string to an integer or returns the default
+    /// parameter if the internal type is not a Type::INTEGER.
+    SKint64 getInteger64(SKint64 defaultValue = -1) const
+    {
+        if (m_type == Type::INTEGER)
+            return skStringConverter::toInt64(m_value);
+        return defaultValue;
+    }
+
     /// Converts the underlying string to an double or returns the default
     /// parameter if the internal type is not a Type::DOUBLE.
     double getDouble(double defaultValue = 0.0) const
