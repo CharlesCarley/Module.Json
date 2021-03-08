@@ -62,7 +62,6 @@ public:
     /// stored.</param>
     void insert(const skString& key, const SKint16& value);
 
-    
     /// <summary>
     /// Inserts a 32-bit signed integer into the dictionary by the supplied lookup
     /// key.
@@ -75,8 +74,6 @@ public:
     /// stored.</param>
     void insert(const skString& key, const SKint32& value);
 
-
-    
     /// <summary>
     /// Inserts a 64-bit signed integer into the dictionary by the supplied lookup
     /// key.
@@ -101,8 +98,6 @@ public:
     /// stored.</param>
     void insert(const skString& key, const float& value);
 
-
-
     /// <summary>
     /// Inserts a double precision value into the dictionary by the supplied lookup
     /// key.
@@ -114,7 +109,6 @@ public:
     /// <param name="value">value is the value that is to be
     /// stored.</param>
     void insert(const skString& key, const double& value);
-
 
     /// <summary>
     /// Inserts a boolean value into the dictionary by the supplied lookup
@@ -139,8 +133,6 @@ public:
     /// <param name="value">value is the value that is to be
     /// stored.</param>
     void insert(const skString& key, const void* value);
-
-
 
     /// <summary>
     /// Returns true if the object has a field with the supplied key.
@@ -192,14 +184,13 @@ public:
     /// <returns>The value for the requested key otherwise def</returns>
     void getValueInt(SKint16& dest, const skString& key, const SKint16& def = -1);
 
-
     /// <summary>
     /// Gets the requested signed 16-bit integer from the dictionary
     /// </summary>
     /// <param name="key">The key to get</param>
     /// <param name="def">The default value if the key is not found.</param>
     /// <returns></returns>
-    SKint16 getInt16(const skString& key, const SKint16& def = -1) 
+    SKint16 getInt16(const skString& key, const SKint16& def = -1)
     {
         SKint16 val;
         getValueInt(val, key, def);
@@ -219,7 +210,6 @@ public:
         return val;
     }
 
-    
     /// <summary>
     /// Gets the requested signed 64-bit integer from the dictionary
     /// </summary>
@@ -233,12 +223,19 @@ public:
         return val;
     }
 
-
     /// <summary>
     /// Returns a string representation of the object.
     /// </summary>
     /// <param name="dest">A destination reference</param>
     void toString(skString& dest) override;
+
+    /// <returns>
+    /// Returns an key, value iterator for objects in this object 
+    /// </returns>
+    Dictionary::Iterator iterator()
+    {
+        return m_dictionary.iterator();
+    }
 };
 
 #endif  //_skJsonObject_h_

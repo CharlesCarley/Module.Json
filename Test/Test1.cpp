@@ -6,6 +6,7 @@
 #include "Json/skJsonType.h"
 #include "TestConfig.h"
 #include "gtest/gtest.h"
+#include "Json/skJsonPrinter.h"
 
 #define MakeTestFile(x) TestDirectory x
 
@@ -317,4 +318,15 @@ GTEST_TEST(Test2, CreateObjectAndReflect)
     EXPECT_EQ(jObj->getInt16("c"), 789);
     EXPECT_EQ(jObj->getInt16("b"), 456);
     EXPECT_EQ(jObj->getInt16("a"), 123);
+}
+
+GTEST_TEST(Test2, PrintFormated)
+{
+    skJsonObject obj;
+    obj.insert("a", 123);
+    obj.insert("b", 456);
+    obj.insert("c", 789);
+
+    skJsonPrinter print;
+    print.writeToStdout(&obj);
 }
