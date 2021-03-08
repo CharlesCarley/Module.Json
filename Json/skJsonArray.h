@@ -45,7 +45,7 @@ public:
     /// </summary>
     skJsonArray();
 
-    virtual ~skJsonArray();
+    ~skJsonArray() override;
 
     /// <summary>
     /// Appends a value to the array.
@@ -79,11 +79,12 @@ public:
     /// <returns>An integer or the supplied defaultValue if the index is
     /// null or out of bounds.
     /// </returns>
-    int intAt(const SKuint32 i, int defaultValue = -1)
+    int intAt(const SKuint32 i, const int defaultValue = -1)
     {
         skJsonType* type = at(i);
         if (!type || !type->isInteger())
             return defaultValue;
+
         return type->getInteger(defaultValue);
     }
 };

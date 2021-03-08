@@ -28,17 +28,18 @@
 class skJsonInteger final : public skJsonType
 {
 private:
-    SKint64 m_ivalue;
+    SKint64 m_i64;
 
 public:
     skJsonInteger() :
         skJsonType(Type::INTEGER), 
-        m_ivalue(0)
+        m_i64(0)
     {
     }
 
     void serialize(void)
     {
+        skStringConverter::toString(m_value, m_i64);
     }
 };
 

@@ -34,6 +34,7 @@ private:
     bool           m_owns;
 
     void parseObject(skJsonScanner& scn, skJsonToken& tok);
+
     void parseArray(skJsonScanner& scn, skJsonToken& tok);
 
 public:

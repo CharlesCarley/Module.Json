@@ -100,11 +100,11 @@ public:
 
     /// Converts the underlying string to an integer or returns the default
     /// parameter if the internal type is not a Type::INTEGER.
-    int getInteger(int defaultValue = -1) const
+    int getInteger(int def = -1) const
     {
         if (m_type == Type::INTEGER)
-            return skStringConverter::toInt(m_value);
-        return defaultValue;
+            return skChar::toInt32(m_value, def);
+        return def;
     }
 
     /// Converts the underlying string to an integer or returns the default

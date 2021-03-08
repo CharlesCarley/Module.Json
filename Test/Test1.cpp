@@ -1,13 +1,9 @@
 #include "TestConfig.h"
 #include "gtest/gtest.h"
 #include "Json/skJsonArray.h"
-#include "Json/skJsonBoolean.h"
-#include "Json/skJsonDouble.h"
-#include "Json/skJsonInteger.h"
 #include "Json/skJsonObject.h"
 #include "Json/skJsonParser.h"
 #include "Json/skJsonScanner.h"
-#include "Json/skJsonString.h"
 #include "Json/skJsonToken.h"
 #include "Json/skJsonType.h"
 
@@ -195,43 +191,43 @@ GTEST_TEST(Test1, ParseTest)
     delete nobj;
 }
 
-void test3ValidateObject(skJsonObject* nobj, bool testArray)
+void Test3ValidateObject(skJsonObject* nObj, bool testArray)
 {
-    EXPECT_TRUE(nobj->hasKey("A"));
-    EXPECT_TRUE(nobj->hasKey("B"));
-    EXPECT_TRUE(nobj->hasKey("C"));
-    EXPECT_TRUE(nobj->hasKey("D"));
-    EXPECT_TRUE(nobj->hasKey("X"));
-    EXPECT_TRUE(nobj->hasKey("Y"));
-    EXPECT_TRUE(nobj->hasKey("Z"));
+    EXPECT_TRUE(nObj->hasKey("A"));
+    EXPECT_TRUE(nObj->hasKey("B"));
+    EXPECT_TRUE(nObj->hasKey("C"));
+    EXPECT_TRUE(nObj->hasKey("D"));
+    EXPECT_TRUE(nObj->hasKey("X"));
+    EXPECT_TRUE(nObj->hasKey("Y"));
+    EXPECT_TRUE(nObj->hasKey("Z"));
 
     if (testArray)
     {
-        EXPECT_TRUE(nobj->hasKey("E"));
+        EXPECT_TRUE(nObj->hasKey("E"));
     }
 
-    const skString& a = nobj->getValue("A")->getString();
+    const skString& a = nObj->getValue("A")->getString();
     EXPECT_TRUE(a.equals("String"));
 
-    const bool c = nobj->getValue("C")->getBoolean();
+    const bool c = nObj->getValue("C")->getBoolean();
     EXPECT_TRUE(c);
 
-    const bool d = nobj->getValue("D")->getBoolean();
+    const bool d = nObj->getValue("D")->getBoolean();
     EXPECT_FALSE(d);
 
     double v;
-    v = nobj->getValue("X")->getDouble();
+    v = nObj->getValue("X")->getDouble();
     EXPECT_EQ(v, 1);
 
-    v = nobj->getValue("Y")->getDouble();
+    v = nObj->getValue("Y")->getDouble();
     EXPECT_EQ(v, 0);
 
-    v = nobj->getValue("Z")->getDouble();
+    v = nObj->getValue("Z")->getDouble();
     EXPECT_EQ(v, 0);
 
     if (testArray)
     {
-        skJsonType* type = nobj->getValue("E");
+        skJsonType* type = nObj->getValue("E");
         EXPECT_TRUE(type->isArray());
         EXPECT_EQ(3, type->asArray()->size());
 
@@ -240,13 +236,14 @@ void test3ValidateObject(skJsonObject* nobj, bool testArray)
             skJsonType* obj = type->asArray()->at(i);
             EXPECT_NE(obj, nullptr);
             EXPECT_TRUE(obj->isObject());
-            skJsonObject* nobj = obj->asObject();
-            test3ValidateObject(nobj, false);
+
+            skJsonObject* tObj = obj->asObject();
+            Test3ValidateObject(tObj, false);
         }
     }
 }
 
-void test3Validate(skJsonArray* arr)
+void Test3Validate(skJsonArray* arr)
 {
     EXPECT_EQ(3, arr->size());
 
@@ -255,33 +252,33 @@ void test3Validate(skJsonArray* arr)
         skJsonType* obj = arr->at(i);
         EXPECT_NE(obj, nullptr);
         EXPECT_TRUE(obj->isObject());
-        skJsonObject* nobj = obj->asObject();
-        test3ValidateObject(nobj, true);
+        skJsonObject* tObj = obj->asObject();
+        Test3ValidateObject(tObj, true);
     }
 }
 
 GTEST_TEST(Test1, ParseTestTest3)
 {
     skJsonParser parser;
+    skJsonType* nObj = parser.parse(MakeTestFile("test3.json"));
 
-    skJsonType* nobj = parser.parse(MakeTestFile("test3.json"));
+    EXPECT_NE(nObj, nullptr);
+    EXPECT_TRUE(nObj->isArray());
 
-    EXPECT_NE(nobj, nullptr);
-    EXPECT_TRUE(nobj->isArray());
+    skJsonArray* arr = nObj->asArray();
+    Test3Validate(arr);
 
-    skJsonArray* arr = nobj->asArray();
-    test3Validate(arr);
-    delete nobj;
+    delete nObj;
 }
 
 GTEST_TEST(Test1, Parse4)
 {
     skJsonParser parser;
-    skJsonType*  nobj = parser.parse(MakeTestFile("test4.json"));
-    EXPECT_NE(nobj, nullptr);
-    EXPECT_EQ(nobj->getType(), skJsonType::Type::ARRAY);
+    skJsonType*  nObj = parser.parse(MakeTestFile("test4.json"));
+    EXPECT_NE(nObj, nullptr);
+    EXPECT_EQ(nObj->getType(), skJsonType::Type::ARRAY);
 
-    skJsonArray* arr = (skJsonArray*)nobj;
+    skJsonArray* arr = (skJsonArray*)nObj;
     EXPECT_EQ(7, arr->size());
     EXPECT_EQ(0, arr->intAt(0));
     EXPECT_EQ(1, arr->intAt(1));
@@ -290,5 +287,5 @@ GTEST_TEST(Test1, Parse4)
     EXPECT_EQ(4, arr->intAt(4));
     EXPECT_EQ(5, arr->intAt(5));
     EXPECT_TRUE(arr->at(6)->getString().equals("Hello"));
-    delete nobj;
+    delete nObj;
 }

@@ -28,18 +28,18 @@
 class skJsonBoolean final : public skJsonType
 {
 private:
-    bool m_bvalue;
+    bool m_bool;
 
 public:
     skJsonBoolean() :
         skJsonType(Type::BOOLEAN),
-        m_bvalue(false)
+        m_bool(false)
     {
     }
 
     void serialize(void)
     {
-        skStringConverter::toString(m_value, m_bvalue);
+        skStringConverter::toString(m_value, m_bool);
     }
 };
 

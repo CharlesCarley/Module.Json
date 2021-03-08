@@ -24,22 +24,21 @@
 
 #include "skJsonType.h"
 
-/// \ingroup Json
 class skJsonDouble final : public skJsonType
 {
 private:
-    double m_dvalue;
+    double m_double;
 
 public:
     skJsonDouble() :
         skJsonType(Type::DOUBLE), 
-        m_dvalue(0.0)
+        m_double(0.0)
     {
     }
 
     void serialize(void)
     {
-        skStringConverter::toString(m_value, m_dvalue);
+        skStringConverter::toString(m_value, m_double);
     }
 };
 

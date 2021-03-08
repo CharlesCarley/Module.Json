@@ -251,20 +251,17 @@ public:
 };
 
 skJsonParser::skJsonParser(skJsonVisitor* visitor) :
-    m_visitor(visitor), m_owns(visitor == nullptr)
+    m_visitor(visitor),
+    m_owns(visitor == nullptr)
 {
     if (m_visitor == nullptr)
-    {
         m_visitor = new skStoreObjectVisitor();
-    }
 }
 
 skJsonParser::~skJsonParser()
 {
     if (m_owns)
-    {
         delete m_visitor;
-    }
 }
 
 skJsonType* skJsonParser::parse(const skString& path)
@@ -277,11 +274,11 @@ skJsonType* skJsonParser::parse(const skString& path)
         skLogf(LD_ERROR, "failed to open the file '%s'\n", path.c_str());
         return nullptr;
     }
+
     skJsonToken tok;
-
     scn.scan(tok);
-    skJsonType* root;
 
+    skJsonType* root;
     if (tok.getType() == skJsonTokenType::JT_LBRACKET)
     {
         parseObject(scn, tok);
@@ -293,7 +290,7 @@ skJsonType* skJsonParser::parse(const skString& path)
         root = m_visitor->getRoot();
     }
     else
-        root = new skJsonObject();
+        root = nullptr;
     return root;
 }
 
