@@ -30,16 +30,33 @@ class skJsonInteger final : public skJsonType
 private:
     SKint64 m_i64;
 
+    void notifyStringChanged() override
+    {
+        m_i64 = m_value.toInt64();
+    }
+
+    void notifyValueChanged() override
+    {
+        skChar::toString(m_value, m_i64);
+    }
+
 public:
     skJsonInteger() :
-        skJsonType(Type::INTEGER), 
+        skJsonType(Type::INTEGER),
         m_i64(0)
     {
     }
 
-    void serialize(void)
+    skJsonInteger(const SKint64& val) :
+        skJsonType(Type::INTEGER),
+        m_i64(val)
     {
-        skStringConverter::toString(m_value, m_i64);
+        notifyValueChanged();
+    }
+
+    void toString(skString& dest) override
+    {
+        skChar::toString(dest, m_i64);
     }
 };
 

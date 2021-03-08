@@ -25,7 +25,6 @@
 #include "Utils/skString.h"
 #include "skJsonToken.h"
 
-/// \ingroup Json
 class skJsonScanner
 {
 private:

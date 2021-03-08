@@ -30,6 +30,16 @@ class skJsonBoolean final : public skJsonType
 private:
     bool m_bool;
 
+    void notifyStringChanged() override
+    {
+        m_bool = m_value.toBoolean();
+    }
+
+    void notifyValueChanged() override
+    {
+        skChar::toString(m_value, m_bool);
+    }
+
 public:
     skJsonBoolean() :
         skJsonType(Type::BOOLEAN),
@@ -37,9 +47,16 @@ public:
     {
     }
 
-    void serialize(void)
+    skJsonBoolean(bool val) :
+        skJsonType(Type::BOOLEAN),
+        m_bool(val)
     {
-        skStringConverter::toString(m_value, m_bool);
+        notifyValueChanged();
+    }
+
+    void toString(skString& dest) override
+    {
+        skChar::toString(dest, m_bool);
     }
 };
 

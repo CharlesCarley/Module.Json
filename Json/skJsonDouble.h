@@ -29,16 +29,33 @@ class skJsonDouble final : public skJsonType
 private:
     double m_double;
 
+    void notifyStringChanged() override
+    {
+        m_double = m_value.toDouble();
+    }
+
+    void notifyValueChanged() override
+    {
+        skChar::toString(m_value, m_double);
+    }
+
 public:
     skJsonDouble() :
-        skJsonType(Type::DOUBLE), 
+        skJsonType(Type::DOUBLE),
         m_double(0.0)
     {
     }
 
-    void serialize(void)
+    skJsonDouble(const double& v) :
+        skJsonType(Type::DOUBLE),
+        m_double(v)
     {
-        skStringConverter::toString(m_value, m_double);
+        notifyValueChanged();
+    }
+
+    void toString(skString& dest) override
+    {
+        skChar::toString(dest, m_double);
     }
 };
 

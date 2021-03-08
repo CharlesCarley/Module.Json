@@ -20,6 +20,8 @@
 -------------------------------------------------------------------------------
 */
 #include "skJsonObject.h"
+#include "skJsonDouble.h"
+#include "skJsonInteger.h"
 
 skJsonObject::skJsonObject() :
     skJsonType(Type::OBJECT)
@@ -68,7 +70,7 @@ void skJsonObject::getValueInt(SKint64& dest, const skString& key, const SKint64
 {
     const SKsize pos = m_dictionary.find(key);
     if (pos != SK_NPOS)
-        dest = m_dictionary.at(pos)->getInteger64(def);
+        dest = m_dictionary.at(pos)->getInt64(def);
     else
         dest = def;
 }
@@ -77,7 +79,7 @@ void skJsonObject::getValueInt(SKint32& dest, const skString& key, const SKint32
 {
     const SKsize pos = m_dictionary.find(key);
     if (pos != SK_NPOS)
-        dest = (SKint32)m_dictionary.at(pos)->getInteger64((SKint64)def);
+        dest = m_dictionary.at(pos)->getInt32(def);
     else
         dest = def;
 }
@@ -86,7 +88,63 @@ void skJsonObject::getValueInt(SKint16& dest, const skString& key, const SKint16
 {
     const SKsize pos = m_dictionary.find(key);
     if (pos != SK_NPOS)
-        dest = (SKint16)m_dictionary.at(pos)->getInteger64((SKint64)def);
+        dest = m_dictionary.at(pos)->getInt16(def);
     else
         dest = def;
+}
+
+void skJsonObject::insert(const skString& key, const SKint16& value)
+{
+    insert(key, (SKint64)value);
+}
+
+void skJsonObject::insert(const skString& key, const SKint32& value)
+{
+    insert(key, (SKint64)value);
+}
+
+void skJsonObject::insert(const skString& key, const SKint64& value)
+{
+    const SKsize pos = m_dictionary.find(key);
+    if (pos == SK_NPOS)
+        m_dictionary.insert(key, new skJsonInteger(value));
+}
+
+void skJsonObject::insert(const skString& key, const float& value)
+{
+    insert(key, (double)value);
+}
+
+void skJsonObject::insert(const skString& key, const double& value)
+{
+    const SKsize pos = m_dictionary.find(key);
+    if (pos == SK_NPOS)
+        m_dictionary.insert(key, new skJsonDouble(value));
+}
+
+void skJsonObject::toString(skString& dest)
+{
+    dest.reserve(128);
+    dest.resize(0);
+    dest.append('{');
+
+    Dictionary::Iterator it = m_dictionary.iterator();
+    while (it.hasMoreElements())
+    {
+        if (dest.at(dest.size() - 1) != '{')
+            dest.append(',');
+
+        const skString& key = it.peekNextKey();
+        skJsonType*     val = it.peekNextValue();
+
+        dest.append('"');
+        dest.append(key);
+        dest.append('"');
+        dest.append(':');
+        dest.append(val->toString());
+
+        it.next();
+    }
+
+    dest.append('}');
 }

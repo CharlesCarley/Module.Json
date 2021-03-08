@@ -24,17 +24,41 @@
 
 #include "skJsonType.h"
 
-/// \ingroup Json
 class skJsonPointer final : public skJsonType
 {
 private:
-    SKsize m_ivalue;
+    SKsize m_address;
+
+    void notifyStringChanged() override
+    {
+        m_address = m_value.toUint64();
+    }
+
+    void notifyValueChanged() override
+    {
+        if (!m_address)
+            m_value.assign("null");
+        else
+            skChar::toString(m_value, m_address);
+    }
 
 public:
     skJsonPointer() :
         skJsonType(Type::POINTER),
-        m_ivalue(0)
+        m_address(0)
     {
+    }
+
+    skJsonPointer(void* vp) :
+        skJsonType(Type::POINTER),
+        m_address((SKsize)vp)
+    {
+        notifyValueChanged();
+    }
+
+    void toString(skString& dest) override
+    {
+        skChar::toString(dest, m_address);
     }
 };
 

@@ -26,7 +26,6 @@
 #include "skJsonToken.h"
 class skJsonVisitor;
 
-/// \ingroup Json
 class skJsonParser
 {
 private:
@@ -36,6 +35,8 @@ private:
     void parseObject(skJsonScanner& scn, skJsonToken& tok);
 
     void parseArray(skJsonScanner& scn, skJsonToken& tok);
+
+    skJsonType* parseCommon(skJsonScanner& scanner);
 
 public:
     skJsonParser(skJsonVisitor* visitor = nullptr);
@@ -61,6 +62,28 @@ public:
     /// use skJsonType methods to determine the underlying type.
     /// </returns>
     skJsonType* parse(const skString& path);
+
+    /// <summary>
+    /// Attempts to parse the memory as JSON.
+    /// </summary>
+    /// <param name="src">Memory source</param>
+    /// <param name="sizeInBytes">The size of the source memory in bytes</param>
+    /// <returns>
+    /// Returns a skJsonType object.
+    ///
+    /// If the root object in the script is opened with a bracket then a
+    /// skJsonObject is returned. <code>
+    /// {
+    ///     "Key": "Value"
+    /// }
+    /// </code>
+    /// If the root object in the script is opened with a brace
+    /// then a skJsonArray is returned.
+    /// <code> [1, 2, 3] </code>
+    ///
+    /// use skJsonType methods to determine the underlying type.
+    /// </returns>
+    skJsonType* parse(const char* src, SKsize sizeInBytes);
 };
 
 #endif  //_skJsonParser_h_

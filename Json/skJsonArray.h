@@ -75,17 +75,22 @@ public:
     /// Attempts to convert the type at the supplied index to an integer.
     /// </summary>
     /// <param name="i">The array position to access</param>
-    /// <param name="defaultValue">Is the return value on any error condition.</param>
+    /// <param name="def">Is the return value on any error condition.</param>
     /// <returns>An integer or the supplied defaultValue if the index is
     /// null or out of bounds.
     /// </returns>
-    int intAt(const SKuint32 i, const int defaultValue = -1)
+    SKuint32 intAt(const SKuint32 i, const SKuint32 def = -1)
     {
         skJsonType* type = at(i);
         if (!type || !type->isInteger())
-            return defaultValue;
+            return def;
+        return type->getInt32(def);
+    }
 
-        return type->getInteger(defaultValue);
+    void toString(skString& dest) override
+    {
+        // todo
+        dest.clear();
     }
 };
 

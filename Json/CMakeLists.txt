@@ -33,6 +33,7 @@ set(TargetName_SOURCE
     skJsonArray.cpp
     skJsonObject.cpp
     skJsonParser.cpp
+    skJsonPrinter.cpp
     skJsonScanner.cpp
     skJsonToken.cpp
     skJsonType.cpp
@@ -42,6 +43,7 @@ set(TargetName_SOURCE
     skJsonDouble.h
     skJsonInteger.h
     skJsonObject.h
+    skJsonPrinter.h
     skJsonParser.h
     skJsonPointer.h
     skJsonScanner.h

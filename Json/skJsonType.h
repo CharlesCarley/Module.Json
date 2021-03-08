@@ -78,10 +78,16 @@ protected:
     {
     }
 
-public:
-    virtual ~skJsonType()
+    virtual void notifyStringChanged()
     {
     }
+
+    virtual void notifyValueChanged()
+    {
+    }
+
+public:
+    virtual ~skJsonType() = default;
 
     /// <summary>
     /// Explicitly set the internal string from the json file
@@ -90,6 +96,7 @@ public:
     void setValue(const skString& str)
     {
         m_value.assign(str);
+        notifyStringChanged();
     }
 
     /// Provides access to the underlying value as a string.
@@ -100,20 +107,56 @@ public:
 
     /// Converts the underlying string to an integer or returns the default
     /// parameter if the internal type is not a Type::INTEGER.
-    int getInteger(int def = -1) const
+    SKint16 getInt16(SKint16 def = -1) const
     {
         if (m_type == Type::INTEGER)
-            return skChar::toInt32(m_value, def);
+            return m_value.toInt16(def);
         return def;
     }
 
     /// Converts the underlying string to an integer or returns the default
     /// parameter if the internal type is not a Type::INTEGER.
-    SKint64 getInteger64(SKint64 defaultValue = -1) const
+    SKint32 getInt32(SKint32 def = -1) const
     {
         if (m_type == Type::INTEGER)
-            return skStringConverter::toInt64(m_value);
-        return defaultValue;
+            return m_value.toInt32(def);
+        return def;
+    }
+
+    /// Converts the underlying string to an integer or returns the default
+    /// parameter if the internal type is not a Type::INTEGER.
+    SKint64 getInt64(SKint64 def = -1) const
+    {
+        if (m_type == Type::INTEGER)
+            return m_value.toInt64(def);
+        return def;
+    }
+
+    /// Converts the underlying string to an integer or returns the default
+    /// parameter if the internal type is not a Type::INTEGER.
+    SKuint16 getUint16(SKuint16 def = -1) const
+    {
+        if (m_type == Type::INTEGER)
+            return m_value.toUint16(def);
+        return def;
+    }
+
+    /// Converts the underlying string to an integer or returns the default
+    /// parameter if the internal type is not a Type::INTEGER.
+    SKuint32 getUint32(SKuint32 def = -1) const
+    {
+        if (m_type == Type::INTEGER)
+            return m_value.toUint32(def);
+        return def;
+    }
+
+    /// Converts the underlying string to an integer or returns the default
+    /// parameter if the internal type is not a Type::INTEGER.
+    SKuint64 getUint64(SKuint64 def = -1) const
+    {
+        if (m_type == Type::INTEGER)
+            return m_value.toUint64(def);
+        return def;
     }
 
     /// Converts the underlying string to an double or returns the default
@@ -191,6 +234,20 @@ public:
     {
         return m_type;
     }
+
+    /// <returns>Returns a string representation of the object. </returns>
+    skString toString()
+    {
+        skString cpy;
+        toString(cpy);
+        return cpy;
+    }
+
+    /// <summary>
+    /// Returns a string representation of the object.
+    /// </summary>
+    /// <param name="dest">A destination reference</param>
+    virtual void toString(skString& dest) = 0;
 };
 
 #endif  //_skJsonValue_h_

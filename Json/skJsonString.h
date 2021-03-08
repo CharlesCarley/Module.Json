@@ -24,13 +24,23 @@
 
 #include "skJsonType.h"
 
-/// \ingroup Json
 class skJsonString final : public skJsonType
 {
 public:
     skJsonString() :
         skJsonType(Type::STRING)
     {
+    }
+
+    skJsonString(const skString& str) :
+        skJsonType(Type::STRING)
+    {
+        setValue(str);
+    }
+
+    void toString(skString& dest) override
+    {
+        dest = m_value;
     }
 };
 

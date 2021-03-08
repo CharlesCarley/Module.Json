@@ -59,6 +59,9 @@ public:
     ~skStoreObjectVisitor() override
     {
         clear();
+
+        delete m_root;
+        m_root = nullptr;
     }
 
     void clear()
@@ -264,6 +267,27 @@ skJsonParser::~skJsonParser()
         delete m_visitor;
 }
 
+skJsonType* skJsonParser::parseCommon(skJsonScanner& scanner)
+{
+    skJsonToken tok;
+    scanner.scan(tok);
+
+    skJsonType* root;
+    if (tok.getType() == skJsonTokenType::JT_LBRACKET)
+    {
+        parseObject(scanner, tok);
+        root = m_visitor->getRoot();
+    }
+    else if (tok.getType() == skJsonTokenType::JT_LBRACE)
+    {
+        parseArray(scanner, tok);
+        root = m_visitor->getRoot();
+    }
+    else
+        root = nullptr;
+    return root;
+}
+
 skJsonType* skJsonParser::parse(const skString& path)
 {
     skJsonScanner scn;
@@ -274,24 +298,20 @@ skJsonType* skJsonParser::parse(const skString& path)
         skLogf(LD_ERROR, "failed to open the file '%s'\n", path.c_str());
         return nullptr;
     }
+    return parseCommon(scn);
+}
 
-    skJsonToken tok;
-    scn.scan(tok);
+skJsonType* skJsonParser::parse(const char* src, SKsize sizeInBytes)
+{
+    skJsonScanner scn;
+    scn.open(src, sizeInBytes);
 
-    skJsonType* root;
-    if (tok.getType() == skJsonTokenType::JT_LBRACKET)
+    if (!scn.isOpen())
     {
-        parseObject(scn, tok);
-        root = m_visitor->getRoot();
+        skLogf(LD_ERROR, "failed to open the json memory file \n");
+        return nullptr;
     }
-    else if (tok.getType() == skJsonTokenType::JT_LBRACE)
-    {
-        parseArray(scn, tok);
-        root = m_visitor->getRoot();
-    }
-    else
-        root = nullptr;
-    return root;
+    return parseCommon(scn);
 }
 
 void skJsonParser::parseObject(skJsonScanner& scn, skJsonToken& tok)

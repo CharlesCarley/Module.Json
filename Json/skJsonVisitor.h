@@ -29,9 +29,7 @@
 class skJsonVisitor
 {
 public:
-    virtual ~skJsonVisitor()
-    {
-    }
+    virtual ~skJsonVisitor() = default;
 
     /// <summary>
     ///
