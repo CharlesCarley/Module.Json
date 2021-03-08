@@ -137,7 +137,9 @@ public:
         }
     }
 
-    void keyValueParsed(const skString& key, const skJsonTokenType& valueType, const skString& value) override
+    void keyValueParsed(const skString&        key,
+                        const skJsonTokenType& valueType,
+                        const skString&        value) override
     {
         if (m_objStack.empty())
         {

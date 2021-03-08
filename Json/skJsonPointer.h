@@ -31,7 +31,10 @@ private:
 
     void notifyStringChanged() override
     {
-        m_address = m_value.toUint64();
+        if (m_value.equals("null"))
+            m_address = 0;
+        else
+            m_address = m_value.toUint64();
     }
 
     void notifyValueChanged() override
@@ -49,7 +52,7 @@ public:
     {
     }
 
-    skJsonPointer(void* vp) :
+    skJsonPointer(const void* vp) :
         skJsonType(Type::POINTER),
         m_address((SKsize)vp)
     {
@@ -58,7 +61,12 @@ public:
 
     void toString(skString& dest) override
     {
-        skChar::toString(dest, m_address);
+        dest.reserve(9);
+        dest.resize(0);
+        if (!m_address)
+            dest.append("null");
+        else
+            skChar::toString(dest, m_address);
     }
 };
 

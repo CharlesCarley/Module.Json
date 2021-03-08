@@ -20,8 +20,10 @@
 -------------------------------------------------------------------------------
 */
 #include "skJsonObject.h"
+#include "skJsonBoolean.h"
 #include "skJsonDouble.h"
 #include "skJsonInteger.h"
+#include "skJsonPointer.h"
 
 skJsonObject::skJsonObject() :
     skJsonType(Type::OBJECT)
@@ -93,6 +95,30 @@ void skJsonObject::getValueInt(SKint16& dest, const skString& key, const SKint16
         dest = def;
 }
 
+bool skJsonObject::getBoolean(const skString& key, bool def)
+{
+    const SKsize pos = m_dictionary.find(key);
+    if (pos != SK_NPOS)
+        return m_dictionary.at(pos)->getBoolean(def);
+    return def;
+}
+
+double skJsonObject::getDouble(const skString& key, double def)
+{
+    const SKsize pos = m_dictionary.find(key);
+    if (pos != SK_NPOS)
+        return m_dictionary.at(pos)->getDouble(def);
+    return def;
+}
+
+float skJsonObject::getFloat(const skString& key, float def)
+{
+    const SKsize pos = m_dictionary.find(key);
+    if (pos != SK_NPOS)
+        return (float)m_dictionary.at(pos)->getDouble((double)def);
+    return def;
+}
+
 void skJsonObject::insert(const skString& key, const SKint16& value)
 {
     insert(key, (SKint64)value);
@@ -120,6 +146,20 @@ void skJsonObject::insert(const skString& key, const double& value)
     const SKsize pos = m_dictionary.find(key);
     if (pos == SK_NPOS)
         m_dictionary.insert(key, new skJsonDouble(value));
+}
+
+void skJsonObject::insert(const skString& key, const bool& value)
+{
+    const SKsize pos = m_dictionary.find(key);
+    if (pos == SK_NPOS)
+        m_dictionary.insert(key, new skJsonBoolean(value));
+}
+
+void skJsonObject::insert(const skString& key, const void* value)
+{
+    const SKsize pos = m_dictionary.find(key);
+    if (pos == SK_NPOS)
+        m_dictionary.insert(key, new skJsonPointer(value));
 }
 
 void skJsonObject::toString(skString& dest)

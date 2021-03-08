@@ -56,7 +56,12 @@ public:
 
     void toString(skString& dest) override
     {
-        skChar::toString(dest, m_bool);
+        dest.reserve(5);
+        dest.resize(0);
+        if (m_bool)
+            dest.append("true");
+        else
+            dest.append("false");
     }
 };
 

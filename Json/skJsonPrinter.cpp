@@ -24,6 +24,7 @@
 #include <cstdio>
 #include "Utils/skFileStream.h"
 #include "Utils/skMemoryStream.h"
+#include "skJsonArray.h"
 #include "skJsonObject.h"
 #include "skJsonType.h"
 
@@ -51,12 +52,10 @@ public:
     {
         using jIterator = skJsonObject::Dictionary::Iterator;
 
-        if (m_depth++ > 0)
-            writeSpace();
-
         m_buffer.append('{');
         m_buffer.append('\n');
 
+        m_depth++;
         bool first = true;
 
         skString  tStr;
@@ -83,12 +82,14 @@ public:
             if (kv.second->isArray())
             {
                 // handle array
+                writeArray(kv.second->asArray());
             }
             else if (kv.second->isObject())
             {
                 // handle object
                 ++m_depth;
                 writeObject(kv.second->asObject());
+                --m_depth;
             }
             else
             {
@@ -97,14 +98,44 @@ public:
             }
         }
         m_buffer.append('\n');
-
-        if (--m_depth > 0)
+        if (m_depth-- > 0)
             writeSpace();
         m_buffer.append('}');
     }
 
     void writeArray(skJsonArray* array)
     {
+        m_buffer.append('[');
+
+        for (SKuint32 i = 0; i < array->size(); ++i)
+        {
+            skJsonType* idx   = array->at(i);
+            const bool  split = idx->isObject() || idx->isArray();
+
+            if (i > 0)
+            {
+                m_buffer.append(',');
+                if (split || i % 20 == 19)
+                {
+                    m_buffer.append('\n');
+                    writeSpace();
+                }
+            }
+
+            if (idx->isObject())
+            {
+                writeObject(idx->asObject());
+            }
+            else if (idx->isArray())
+                writeArray(idx->asArray());
+            else
+            {
+                skString tStr;
+                idx->toString(tStr);
+                m_buffer.append(tStr);
+            }
+        }
+        m_buffer.append(']');
     }
 
     void write(skJsonType* obj)
@@ -156,4 +187,10 @@ void skJsonPrinter::writeToStdout(skJsonType* obj) const
 {
     m_private->write(obj);
     puts(m_private->getBuffer().c_str());
+}
+
+void skJsonPrinter::writeToString(skString& dest, skJsonType* obj) const
+{
+    m_private->write(obj);
+    dest = m_private->getBuffer();
 }

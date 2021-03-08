@@ -55,6 +55,9 @@ public:
 
     void toString(skString& dest) override
     {
+        dest.reserve(16);
+        dest.resize(0);
+
         skChar::toString(dest, m_double);
     }
 };

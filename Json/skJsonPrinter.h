@@ -37,6 +37,7 @@ public:
 
     void writeToFile(skJsonType* obj, const skString& path) const;
     void writeToStdout(skJsonType* obj) const;
+    void writeToString(skString &dest, skJsonType* obj) const;
 };
 
 #endif  //_skJsonPrinter_h_

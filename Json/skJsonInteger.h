@@ -28,35 +28,51 @@
 class skJsonInteger final : public skJsonType
 {
 private:
-    SKint64 m_i64;
+
+    typedef union Integer
+    {
+        SKint16 i16[4];
+        SKint32 i32[2];
+        SKint64 i64;
+        SKuint16 u16[4];
+        SKuint32 u32[2];
+        SKuint64 u64;
+    } Integer;
+
+
+    Integer m_integer;
 
     void notifyStringChanged() override
     {
-        m_i64 = m_value.toInt64();
+        m_integer.i64 = m_value.toInt64();
     }
 
     void notifyValueChanged() override
     {
-        skChar::toString(m_value, m_i64);
+        skChar::toString(m_value, m_integer.i64);
     }
 
 public:
+
     skJsonInteger() :
         skJsonType(Type::INTEGER),
-        m_i64(0)
+        m_integer({})
     {
     }
 
     skJsonInteger(const SKint64& val) :
         skJsonType(Type::INTEGER),
-        m_i64(val)
+        m_integer({})
     {
+        m_integer.i64 = val;
         notifyValueChanged();
     }
 
     void toString(skString& dest) override
     {
-        skChar::toString(dest, m_i64);
+        dest.reserve(32);
+        dest.resize(0);
+        skChar::toString(dest, m_integer.i64);
     }
 };
 

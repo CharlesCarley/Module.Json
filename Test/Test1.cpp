@@ -1,12 +1,12 @@
 #include "Json/skJsonArray.h"
 #include "Json/skJsonObject.h"
 #include "Json/skJsonParser.h"
+#include "Json/skJsonPrinter.h"
 #include "Json/skJsonScanner.h"
 #include "Json/skJsonToken.h"
 #include "Json/skJsonType.h"
 #include "TestConfig.h"
 #include "gtest/gtest.h"
-#include "Json/skJsonPrinter.h"
 
 #define MakeTestFile(x) TestDirectory x
 
@@ -277,12 +277,12 @@ GTEST_TEST(Test1, Parse4)
 
     skJsonArray* arr = (skJsonArray*)nObj;
     EXPECT_EQ(7, arr->size());
-    EXPECT_EQ(0, arr->intAt(0));
-    EXPECT_EQ(1, arr->intAt(1));
-    EXPECT_EQ(2, arr->intAt(2));
-    EXPECT_EQ(3, arr->intAt(3));
-    EXPECT_EQ(4, arr->intAt(4));
-    EXPECT_EQ(5, arr->intAt(5));
+    EXPECT_EQ(0, arr->int16(0));
+    EXPECT_EQ(1, arr->int16(1));
+    EXPECT_EQ(2, arr->int16(2));
+    EXPECT_EQ(3, arr->int16(3));
+    EXPECT_EQ(4, arr->int16(4));
+    EXPECT_EQ(5, arr->int16(5));
     EXPECT_TRUE(arr->at(6)->getString().equals("Hello"));
 }
 
@@ -309,7 +309,6 @@ GTEST_TEST(Test2, CreateObjectAndReflect)
     EXPECT_NE(type, nullptr);
     EXPECT_TRUE(type->isObject());
 
-
     skJsonObject* jObj = type->asObject();
     EXPECT_TRUE(jObj->hasKey("a"));
     EXPECT_TRUE(jObj->hasKey("b"));
@@ -318,6 +317,49 @@ GTEST_TEST(Test2, CreateObjectAndReflect)
     EXPECT_EQ(jObj->getInt16("c"), 789);
     EXPECT_EQ(jObj->getInt16("b"), 456);
     EXPECT_EQ(jObj->getInt16("a"), 123);
+}
+
+GTEST_TEST(Test2, CreateArrayAndReflect)
+{
+    skJsonArray obj;
+    obj.add(0);
+    obj.add(1);
+    obj.add(2);
+    obj.add(3);
+    obj.add(4);
+    obj.add(5);
+
+    skString actual;
+    obj.toString(actual);
+
+    const skString expected1 = "[0,1,2,3,4,5]";
+    EXPECT_TRUE(expected1.equals(actual));
+
+    obj.add(6);
+    obj.add(7);
+    obj.add(8);
+    obj.add(9);
+
+    const skString expected2 = "[0,1,2,3,4,5,6,7,8,9]";
+    obj.toString(actual);
+    EXPECT_TRUE(expected2.equals(actual));
+
+    skJsonParser parser;
+    skJsonType*  type = parser.parse(expected2.c_str(), expected2.size());
+    EXPECT_NE(type, nullptr);
+    EXPECT_TRUE(type->isArray());
+
+    skJsonArray* jObj = type->asArray();
+    EXPECT_EQ(0, jObj->int16(0));
+    EXPECT_EQ(1, jObj->int16(1));
+    EXPECT_EQ(2, jObj->int16(2));
+    EXPECT_EQ(3, jObj->int16(3));
+    EXPECT_EQ(4, jObj->int16(4));
+    EXPECT_EQ(5, jObj->int16(5));
+    EXPECT_EQ(6, jObj->int16(6));
+    EXPECT_EQ(7, jObj->int16(7));
+    EXPECT_EQ(8, jObj->int16(8));
+    EXPECT_EQ(9, jObj->int16(9));
 }
 
 GTEST_TEST(Test2, PrintFormated)
@@ -329,4 +371,50 @@ GTEST_TEST(Test2, PrintFormated)
 
     skJsonPrinter print;
     print.writeToStdout(&obj);
+
+    skJsonParser parser;
+    skJsonType*  nObj = parser.parse(MakeTestFile("test3.json"));
+
+    print.writeToStdout(nObj);
+}
+
+
+
+GTEST_TEST(Test2, Test3Reflect)
+{
+    skJsonParser parser;
+    skJsonType*  nObj = parser.parse(MakeTestFile("test3.json"));
+
+    EXPECT_NE(nObj, nullptr);
+    EXPECT_TRUE(nObj->isArray());
+
+    // validate initially
+    skJsonArray* arr = nObj->asArray();
+    Test3Validate(arr);
+
+    // validate compactly
+
+    const skString rp1s = nObj->toString();
+
+    skJsonParser reparse1;
+    skJsonType*  rp1 = reparse1.parse(rp1s.c_str(), rp1s.size());
+
+    EXPECT_NE(rp1, nullptr);
+    EXPECT_TRUE(rp1->isArray());
+    Test3Validate(rp1->asArray());
+
+
+    // validate formatted;
+
+    skString rp2s;
+    skJsonPrinter print;
+    print.writeToString(rp2s, nObj);
+
+
+    skJsonParser reparse2;
+    skJsonType*  rp2 = reparse1.parse(rp2s.c_str(), rp2s.size());
+
+    EXPECT_NE(rp2, nullptr);
+    EXPECT_TRUE(rp2->isArray());
+    Test3Validate(rp2->asArray());
 }

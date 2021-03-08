@@ -224,6 +224,30 @@ public:
     }
 
     /// <summary>
+    /// Gets the requested boolean from the dictionary
+    /// </summary>
+    /// <param name="key">The key to get</param>
+    /// <param name="def">The default value if the key is not found.</param>
+    bool getBoolean(const skString& key, bool def = false);
+
+
+
+    /// <summary>
+    /// Gets the requested double precision value from the dictionary
+    /// </summary>
+    /// <param name="key">The key to get</param>
+    /// <param name="def">The default value if the key is not found.</param>
+    double getDouble(const skString& key, double def = 0.0);
+
+    /// <summary>
+    /// Gets the requested single precision value from the dictionary
+    /// </summary>
+    /// <param name="key">The key to get</param>
+    /// <param name="def">The default value if the key is not found.</param>
+    float getFloat(const skString& key, float def = 0.0);
+
+
+    /// <summary>
     /// Returns a string representation of the object.
     /// </summary>
     /// <param name="dest">A destination reference</param>

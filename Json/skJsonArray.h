@@ -54,6 +54,73 @@ public:
     void add(skJsonType* value);
 
     /// <summary>
+    /// Appends a 16-bit signed integer value to the array.
+    /// </summary>
+    /// <param name="value">The value to add to the array</param>
+    void add(const SKint16& value);
+
+    /// <summary>
+    /// Appends a 32-bit signed integer value to the array.
+    /// </summary>
+    /// <param name="value">The value to add to the array</param>
+    void add(const SKint32& value);
+
+    /// <summary>
+    /// Appends a 64-bit signed integer value to the array.
+    /// </summary>
+    /// <param name="value">The value to add to the array</param>
+    void add(const SKint64& value);
+
+    /// <summary>
+    /// Appends a 16-bit unsigned integer value to the array.
+    /// </summary>
+    /// <param name="value">The value to add to the array</param>
+    void add(const SKuint16& value);
+
+    
+    /// <summary>
+    /// Appends a 32-bit unsigned integer value to the array.
+    /// </summary>
+    /// <param name="value">The value to add to the array</param>
+    void add(const SKuint32& value);
+
+    /// <summary>
+    /// Appends a 64-bit unsigned integer value to the array.
+    /// </summary>
+    /// <param name="value">The value to add to the array</param>
+    void add(const SKuint64& value);
+
+    /// <summary>
+    /// Appends a boolean value to the array.
+    /// </summary>
+    /// <param name="value">The value to add to the array</param>
+    void add(bool value);
+
+    /// <summary>
+    /// Appends a double precision value to the array.
+    /// </summary>
+    /// <param name="value">The value to add to the array</param>
+    void add(const double&  value);
+
+    /// <summary>
+    /// Appends a single precision value to the array.
+    /// </summary>
+    /// <param name="value">The value to add to the array</param>
+    void add(const float& value);
+
+    /// <summary>
+    /// Appends a string value to the array.
+    /// </summary>
+    /// <param name="value">The value to add to the array</param>
+    void add(const skString& value);
+
+    /// <summary>
+    /// Appends a pointer value to the array.
+    /// </summary>
+    /// <param name="value">The value to add to the array</param>
+    void add(const void *value);
+
+    /// <summary>
     /// Returns the number of elements in the array.
     /// </summary>
     SKuint32 size(void) const
@@ -76,10 +143,23 @@ public:
     /// </summary>
     /// <param name="i">The array position to access</param>
     /// <param name="def">Is the return value on any error condition.</param>
-    /// <returns>An integer or the supplied defaultValue if the index is
-    /// null or out of bounds.
-    /// </returns>
-    SKuint32 intAt(const SKuint32 i, const SKuint32 def = -1)
+    /// <returns>An integer or the supplied default if the index is null or out of bounds. </returns>
+    SKint16 int16(const SKuint32 i, const SKint16 def = -1)
+    {
+        skJsonType* type = at(i);
+        if (!type || !type->isInteger())
+            return def;
+        return type->getInt16(def);
+    }
+
+
+    /// <summary>
+    /// Attempts to convert the type at the supplied index to an integer.
+    /// </summary>
+    /// <param name="i">The array position to access</param>
+    /// <param name="def">Is the return value on any error condition.</param>
+    /// <returns>An integer or the supplied default if the index is null or out of bounds. </returns>
+    SKint32 int32(const SKuint32 i, const SKint32 def = -1)
     {
         skJsonType* type = at(i);
         if (!type || !type->isInteger())
@@ -87,10 +167,26 @@ public:
         return type->getInt32(def);
     }
 
-    void toString(skString& dest) override
+    /// <summary>
+    /// Attempts to convert the type at the supplied index to an integer.
+    /// </summary>
+    /// <param name="i">The array position to access</param>
+    /// <param name="def">Is the return value on any error condition.</param>
+    /// <returns>An integer or the supplied default if the index is null or out of bounds. </returns>
+    SKint64 int64(const SKuint32 i, const SKint64 def = -1)
     {
-        // todo
-        dest.clear();
+        skJsonType* type = at(i);
+        if (!type || !type->isInteger())
+            return def;
+        return type->getInt64(def);
+    }
+
+    void toString(skString& dest) override;
+
+
+    Array::Iterator iterator()
+    {
+        return m_array.iterator();
     }
 };
 

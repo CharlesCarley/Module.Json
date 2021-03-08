@@ -40,7 +40,11 @@ public:
 
     void toString(skString& dest) override
     {
-        dest = m_value;
+        dest.reserve(m_value.size() + 2);
+        dest.resize(0);
+        dest.append('"');
+        dest.append(m_value);
+        dest.append('"');
     }
 };
 

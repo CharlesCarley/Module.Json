@@ -20,6 +20,11 @@
 -------------------------------------------------------------------------------
 */
 #include "skJsonArray.h"
+#include "skJsonBoolean.h"
+#include "skJsonDouble.h"
+#include "skJsonInteger.h"
+#include "skJsonPointer.h"
+#include "skJsonString.h"
 
 skJsonArray::skJsonArray() :
     skJsonType(Type::ARRAY)
@@ -37,4 +42,78 @@ void skJsonArray::add(skJsonType* value)
 {
     if (value)
         m_array.push_back(value);
+}
+
+void skJsonArray::add(const SKint16& value)
+{
+    add(new skJsonInteger(value));
+}
+
+void skJsonArray::add(const SKint32& value)
+{
+    add(new skJsonInteger(value));
+}
+
+void skJsonArray::add(const SKint64& value)
+{
+    add(new skJsonInteger(value));
+}
+
+void skJsonArray::add(const SKuint16& value)
+{
+    add(new skJsonInteger(value));
+}
+
+void skJsonArray::add(const SKuint32& value)
+{
+    add(new skJsonInteger(value));
+}
+
+void skJsonArray::add(const SKuint64& value)
+{
+    add(new skJsonInteger(value));
+}
+
+void skJsonArray::add(bool value)
+{
+    add(new skJsonBoolean(value));
+}
+
+void skJsonArray::add(const double& value)
+{
+    add(new skJsonDouble(value));
+}
+
+void skJsonArray::add(const float& value)
+{
+    add(new skJsonDouble((double)value));
+}
+
+void skJsonArray::add(const skString& value)
+{
+    add(new skJsonString(value));
+}
+
+void skJsonArray::add(const void* value)
+{
+    add(new skJsonPointer(value));
+}
+
+void skJsonArray::toString(skString& dest)
+{
+    dest.reserve(128);
+    dest.resize(0);
+    dest.append('[');
+
+    skString tStr;
+    for (SKuint32 i = 0; i < m_array.size(); ++i)
+    {
+        skJsonType* type = m_array.at(i);
+        if (i > 0)
+            dest.append(',');
+
+        type->toString(tStr);
+        dest.append(tStr);
+    }
+    dest.append(']');
 }
