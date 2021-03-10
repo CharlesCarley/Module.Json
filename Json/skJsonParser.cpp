@@ -152,14 +152,14 @@ public:
         skJsonType* obj = nullptr;
         switch (valueType)
         {
-        case skJsonTokenType::JT_LBRACE:
+        case skJsonTokenType::JT_L_BRACE:
             if (!m_finishedArrays.empty())
             {
                 obj = m_finishedArrays.top();
                 m_finishedArrays.pop();
             }
             break;
-        case skJsonTokenType::JT_LBRACKET:
+        case skJsonTokenType::JT_L_BRACKET:
             if (!m_finishedObjects.empty())
             {
                 obj = m_finishedObjects.top();
@@ -184,8 +184,8 @@ public:
         case skJsonTokenType::JT_UNDEFINED:
         case skJsonTokenType::JT_COLON:
         case skJsonTokenType::JT_COMMA:
-        case skJsonTokenType::JT_RBRACE:
-        case skJsonTokenType::JT_RBRACKET:
+        case skJsonTokenType::JT_R_BRACE:
+        case skJsonTokenType::JT_R_BRACKET:
             break;
         }
 
@@ -275,12 +275,12 @@ skJsonType* skJsonParser::parseCommon(skJsonScanner& scanner)
     scanner.scan(tok);
 
     skJsonType* root;
-    if (tok.getType() == skJsonTokenType::JT_LBRACKET)
+    if (tok.getType() == skJsonTokenType::JT_L_BRACKET)
     {
         parseObject(scanner, tok);
         root = m_visitor->getRoot();
     }
-    else if (tok.getType() == skJsonTokenType::JT_LBRACE)
+    else if (tok.getType() == skJsonTokenType::JT_L_BRACE)
     {
         parseArray(scanner, tok);
         root = m_visitor->getRoot();
@@ -321,11 +321,11 @@ void skJsonParser::parseObject(skJsonScanner& scn, skJsonToken& tok)
     m_visitor->objectCreated();
     skJsonToken t1, t2;
 
-    while (tok.getType() != skJsonTokenType::JT_RBRACKET)
+    while (tok.getType() != skJsonTokenType::JT_R_BRACKET)
     {
         scn.scan(t1);
 
-        if (t1.getType() == skJsonTokenType::JT_RBRACKET)
+        if (t1.getType() == skJsonTokenType::JT_R_BRACKET)
         {
             break;  // empty
         }
@@ -347,10 +347,10 @@ void skJsonParser::parseObject(skJsonScanner& scn, skJsonToken& tok)
         skJsonTokenType type = t2.getType();
         switch (type)
         {
-        case skJsonTokenType::JT_LBRACE:
+        case skJsonTokenType::JT_L_BRACE:
             parseArray(scn, t2);
             break;
-        case skJsonTokenType::JT_LBRACKET:
+        case skJsonTokenType::JT_L_BRACKET:
             parseObject(scn, t2);
             break;
         case skJsonTokenType::JT_STRING:
@@ -362,8 +362,8 @@ void skJsonParser::parseObject(skJsonScanner& scn, skJsonToken& tok)
         case skJsonTokenType::JT_UNDEFINED:
         case skJsonTokenType::JT_COLON:
         case skJsonTokenType::JT_COMMA:
-        case skJsonTokenType::JT_RBRACE:
-        case skJsonTokenType::JT_RBRACKET:
+        case skJsonTokenType::JT_R_BRACE:
+        case skJsonTokenType::JT_R_BRACKET:
             m_visitor->parseError(t2);
             return;
         }
@@ -386,10 +386,10 @@ void skJsonParser::parseArray(skJsonScanner& scn, skJsonToken& tok)
     m_visitor->arrayCreated();
     skJsonToken t1;
 
-    while (tok.getType() != skJsonTokenType::JT_RBRACE)
+    while (tok.getType() != skJsonTokenType::JT_R_BRACE)
     {
         scn.scan(t1);
-        if (t1.getType() == skJsonTokenType::JT_RBRACE)
+        if (t1.getType() == skJsonTokenType::JT_R_BRACE)
         {
             break;  // empty
         }
@@ -397,11 +397,11 @@ void skJsonParser::parseArray(skJsonScanner& scn, skJsonToken& tok)
         const skJsonTokenType type = t1.getType();
         switch (type)
         {
-        case skJsonTokenType::JT_LBRACE:
+        case skJsonTokenType::JT_L_BRACE:
             parseArray(scn, t1);
             m_visitor->arrayParsed();
             break;
-        case skJsonTokenType::JT_LBRACKET:
+        case skJsonTokenType::JT_L_BRACKET:
             parseObject(scn, t1);
             m_visitor->objectParsed();
             break;
@@ -423,8 +423,8 @@ void skJsonParser::parseArray(skJsonScanner& scn, skJsonToken& tok)
         case skJsonTokenType::JT_UNDEFINED:
         case skJsonTokenType::JT_COLON:
         case skJsonTokenType::JT_COMMA:
-        case skJsonTokenType::JT_RBRACE:
-        case skJsonTokenType::JT_RBRACKET:
+        case skJsonTokenType::JT_R_BRACE:
+        case skJsonTokenType::JT_R_BRACKET:
             m_visitor->parseError(t1);
             return;
         }

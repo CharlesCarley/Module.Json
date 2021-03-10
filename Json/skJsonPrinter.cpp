@@ -24,6 +24,7 @@
 #include <cstdio>
 #include "Utils/skFileStream.h"
 #include "Utils/skMemoryStream.h"
+#include "Utils/skStringBuilder.h"
 #include "skJsonArray.h"
 #include "skJsonObject.h"
 #include "skJsonType.h"
@@ -31,29 +32,29 @@
 class skJsonPrinterPrivate
 {
 private:
-    skString m_buffer;
-    int      m_depth;
+    skStringBuilder m_buffer;
+    int             m_depth;
 
 public:
     skJsonPrinterPrivate() :
         m_depth(0)
     {
-        m_buffer.reserve(2048);  // needs an expansion strategy
+        m_buffer.setStrategy(ALLOC_N_BYTE_BLOCK, 128);
     }
 
     void writeSpace()
     {
         const char WS[] = {' ', ' ', ' ', ' ', 0};
         for (int i = 0; i < m_depth; ++i)
-            m_buffer.append(WS, 4);
+            m_buffer.write(WS, 4);
     }
 
     void writeObject(skJsonObject* root)
     {
         using jIterator = skJsonObject::Dictionary::Iterator;
 
-        m_buffer.append('{');
-        m_buffer.append('\n');
+        m_buffer.write('{');
+        m_buffer.write('\n');
 
         m_depth++;
         bool first = true;
@@ -65,19 +66,19 @@ public:
             jIterator::ReferenceType kv = it.getNext();
             if (!first)
             {
-                m_buffer.append(',');
-                m_buffer.append('\n');
+                m_buffer.write(',');
+                m_buffer.write('\n');
             }
             else
                 first = false;
 
             writeSpace();
 
-            m_buffer.append('"');
-            m_buffer.append(kv.first);
-            m_buffer.append('"');
-            m_buffer.append(':');
-            m_buffer.append(' ');
+            m_buffer.write('"');
+            m_buffer.write(kv.first);
+            m_buffer.write('"');
+            m_buffer.write(':');
+            m_buffer.write(' ');
 
             if (kv.second->isArray())
             {
@@ -94,18 +95,18 @@ public:
             else
             {
                 kv.second->toString(tStr);
-                m_buffer.append(tStr);
+                m_buffer.write(tStr);
             }
         }
-        m_buffer.append('\n');
+        m_buffer.write('\n');
         if (m_depth-- > 0)
             writeSpace();
-        m_buffer.append('}');
+        m_buffer.write('}');
     }
 
     void writeArray(skJsonArray* array)
     {
-        m_buffer.append('[');
+        m_buffer.write('[');
 
         for (SKuint32 i = 0; i < array->size(); ++i)
         {
@@ -114,10 +115,10 @@ public:
 
             if (i > 0)
             {
-                m_buffer.append(',');
+                m_buffer.write(',');
                 if (split || i % 20 == 19)
                 {
-                    m_buffer.append('\n');
+                    m_buffer.write('\n');
                     writeSpace();
                 }
             }
@@ -132,10 +133,10 @@ public:
             {
                 skString tStr;
                 idx->toString(tStr);
-                m_buffer.append(tStr);
+                m_buffer.write(tStr);
             }
         }
-        m_buffer.append(']');
+        m_buffer.write(']');
     }
 
     void write(skJsonType* obj)
@@ -149,9 +150,9 @@ public:
         }
     }
 
-    const skString& getBuffer() const
+    void getBuffer(skString& dest) const
     {
-        return m_buffer;
+        m_buffer.toString(dest);
     }
 };
 
@@ -174,7 +175,8 @@ void skJsonPrinter::writeToFile(skJsonType* obj, const skString& path) const
 
     if (fs.isOpen())
     {
-        const skString& buffer = m_private->getBuffer();
+        skString buffer;
+        m_private->getBuffer(buffer);
         fs.write(buffer.c_str(), buffer.size());
     }
     else
@@ -186,11 +188,13 @@ void skJsonPrinter::writeToFile(skJsonType* obj, const skString& path) const
 void skJsonPrinter::writeToStdout(skJsonType* obj) const
 {
     m_private->write(obj);
-    puts(m_private->getBuffer().c_str());
+    skString buffer;
+    m_private->getBuffer(buffer);
+    puts(buffer.c_str());
 }
 
 void skJsonPrinter::writeToString(skString& dest, skJsonType* obj) const
 {
     m_private->write(obj);
-    dest = m_private->getBuffer();
+    m_private->getBuffer(dest);
 }

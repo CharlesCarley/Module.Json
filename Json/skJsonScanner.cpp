@@ -114,10 +114,10 @@ void skJsonScanner::scan(skJsonToken& tok)
         }
 
         case '[':
-            tok.setType(skJsonTokenType::JT_LBRACE);
+            tok.setType(skJsonTokenType::JT_L_BRACE);
             return;
         case ']':
-            tok.setType(skJsonTokenType::JT_RBRACE);
+            tok.setType(skJsonTokenType::JT_R_BRACE);
             return;
         case ',':
             tok.setType(skJsonTokenType::JT_COMMA);
@@ -126,10 +126,10 @@ void skJsonScanner::scan(skJsonToken& tok)
             tok.setType(skJsonTokenType::JT_COLON);
             return;
         case '{':
-            tok.setType(skJsonTokenType::JT_LBRACKET);
+            tok.setType(skJsonTokenType::JT_L_BRACKET);
             return;
         case '}':
-            tok.setType(skJsonTokenType::JT_RBRACKET);
+            tok.setType(skJsonTokenType::JT_R_BRACKET);
             return;
         case '\"':
         {

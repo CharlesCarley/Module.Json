@@ -48,7 +48,7 @@ GTEST_TEST(Test1, ScanTest)
 
     skJsonToken tok;
     scanner.scan(tok);
-    EXPECT_EQ(tok.getType(), skJsonTokenType::JT_LBRACKET);
+    EXPECT_EQ(tok.getType(), skJsonTokenType::JT_L_BRACKET);
 
     scanner.scan(tok);
     EXPECT_EQ(tok.getType(), skJsonTokenType::JT_STRING);
@@ -128,7 +128,7 @@ GTEST_TEST(Test1, ScanTest)
     EXPECT_EQ(tok.getType(), skJsonTokenType::JT_COLON);
 
     scanner.scan(tok);
-    EXPECT_EQ(tok.getType(), skJsonTokenType::JT_LBRACE);
+    EXPECT_EQ(tok.getType(), skJsonTokenType::JT_L_BRACE);
 
     scanner.scan(tok);
     EXPECT_EQ(tok.getType(), skJsonTokenType::JT_STRING);
@@ -156,10 +156,10 @@ GTEST_TEST(Test1, ScanTest)
     EXPECT_TRUE(tok.getValue().equals("null"));
 
     scanner.scan(tok);
-    EXPECT_EQ(tok.getType(), skJsonTokenType::JT_RBRACE);
+    EXPECT_EQ(tok.getType(), skJsonTokenType::JT_R_BRACE);
 
     scanner.scan(tok);
-    EXPECT_EQ(tok.getType(), skJsonTokenType::JT_RBRACKET);
+    EXPECT_EQ(tok.getType(), skJsonTokenType::JT_R_BRACKET);
 
     scanner.scan(tok);
     EXPECT_EQ(tok.getType(), skJsonTokenType::JT_NULL);

@@ -24,12 +24,9 @@
 skJsonToken::skJsonToken() :
     m_type(skJsonTokenType::JT_UNDEFINED)
 {
-    m_value.reserve(64);
+    m_value.reserve(63);
 }
 
-skJsonToken ::~skJsonToken()
-{
-}
 
 void skJsonToken::push(const char value)
 {

@@ -37,10 +37,10 @@ enum class skJsonTokenType
     JT_UNDEFINED,
     JT_COLON,
     JT_COMMA,
-    JT_LBRACE,
-    JT_LBRACKET,
-    JT_RBRACE,
-    JT_RBRACKET,
+    JT_L_BRACE,
+    JT_L_BRACKET,
+    JT_R_BRACE,
+    JT_R_BRACKET,
     JT_NUMBER,
     JT_INTEGER,
     JT_BOOL,
@@ -58,7 +58,7 @@ private:
 
 public:
     skJsonToken();
-    ~skJsonToken();
+    ~skJsonToken() = default;
 
     /// <summary>
     ///
