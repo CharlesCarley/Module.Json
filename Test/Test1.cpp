@@ -1,10 +1,10 @@
-#include "Json/skJsonType.h"
 #include "Json/skJsonArray.h"
 #include "Json/skJsonObject.h"
 #include "Json/skJsonParser.h"
 #include "Json/skJsonPrinter.h"
 #include "Json/skJsonScanner.h"
 #include "Json/skJsonToken.h"
+#include "Json/skJsonType.h"
 #include "TestConfig.h"
 #include "gtest/gtest.h"
 
@@ -378,8 +378,6 @@ GTEST_TEST(Test2, PrintFormated)
     print.writeToStdout(nObj);
 }
 
-
-
 GTEST_TEST(Test2, Test3Reflect)
 {
     skJsonParser parser;
@@ -403,13 +401,11 @@ GTEST_TEST(Test2, Test3Reflect)
     EXPECT_TRUE(rp1->isArray());
     Test3Validate(rp1->asArray());
 
-
     // validate formatted;
 
-    skString rp2s;
+    skString      rp2s;
     skJsonPrinter print;
     print.writeToString(rp2s, nObj);
-
 
     skJsonParser reparse2;
     skJsonType*  rp2 = reparse1.parse(rp2s.c_str(), rp2s.size());

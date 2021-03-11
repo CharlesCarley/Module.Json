@@ -160,29 +160,30 @@ skJsonPrinter::~skJsonPrinter()
 
 void skJsonPrinter::writeToFile(skJsonType* obj, const skString& path) const
 {
-    m_private->write(obj);
-
     skFileStream fs;
     fs.open(path.c_str(), skStream::WRITE);
 
     if (fs.isOpen())
     {
+        m_private->write(obj);
+
         skString buffer;
         m_private->getBuffer(buffer);
+
         fs.write(buffer.c_str(), buffer.size());
     }
     else
-    {
         printf("Failed to open '%s'\n ", path.c_str());
-    }
 }
 
 void skJsonPrinter::writeToStdout(skJsonType* obj) const
 {
     m_private->write(obj);
+
     skString buffer;
     m_private->getBuffer(buffer);
-    puts(buffer.c_str());
+    if (!buffer.empty())
+        puts(buffer.c_str());
 }
 
 void skJsonPrinter::writeToString(skString& dest, skJsonType* obj) const
