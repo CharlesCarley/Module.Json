@@ -59,7 +59,6 @@ public:
         m_depth++;
         bool first = true;
 
-        skString  tStr;
         jIterator it = root->iterator();
         while (it.hasMoreElements())
         {
@@ -118,11 +117,8 @@ public:
                     writeSpace();
                 }
             }
-
             if (idx->isObject())
-            {
                 writeObject(idx->asObject());
-            }
             else if (idx->isArray())
                 writeArray(idx->asArray());
             else
