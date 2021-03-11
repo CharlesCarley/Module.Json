@@ -54,14 +54,12 @@ public:
         notifyValueChanged();
     }
 
-    void toString(skString& dest) override
+    void toString(skStringBuilder& dest) override
     {
-        dest.reserve(5);
-        dest.resize(0);
         if (m_bool)
-            dest.append("true");
+            dest.write("true", 4);
         else
-            dest.append("false");
+            dest.write("false", 5);
     }
 };
 

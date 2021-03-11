@@ -77,7 +77,6 @@ public:
     /// <param name="value">The value to add to the array</param>
     void add(const SKuint16& value);
 
-    
     /// <summary>
     /// Appends a 32-bit unsigned integer value to the array.
     /// </summary>
@@ -100,7 +99,7 @@ public:
     /// Appends a double precision value to the array.
     /// </summary>
     /// <param name="value">The value to add to the array</param>
-    void add(const double&  value);
+    void add(const double& value);
 
     /// <summary>
     /// Appends a single precision value to the array.
@@ -118,7 +117,7 @@ public:
     /// Appends a pointer value to the array.
     /// </summary>
     /// <param name="value">The value to add to the array</param>
-    void add(const void *value);
+    void add(const void* value);
 
     /// <summary>
     /// Returns the number of elements in the array.
@@ -152,7 +151,6 @@ public:
         return type->getInt16(def);
     }
 
-
     /// <summary>
     /// Attempts to convert the type at the supplied index to an integer.
     /// </summary>
@@ -181,8 +179,13 @@ public:
         return type->getInt64(def);
     }
 
-    void toString(skString& dest) override;
+    void toString(skString& dest) override
+    {
+        skJsonType::toString(dest);
+        
+    }
 
+    void toString(skStringBuilder& dest) override;
 
     Array::Iterator iterator()
     {

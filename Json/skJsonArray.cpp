@@ -99,21 +99,17 @@ void skJsonArray::add(const void* value)
     add(new skJsonPointer(value));
 }
 
-void skJsonArray::toString(skString& dest)
+void skJsonArray::toString(skStringBuilder& dest)
 {
-    dest.reserve(128);
-    dest.resize(0);
-    dest.append('[');
+    dest.write('[');
 
-    skString tStr;
     for (SKuint32 i = 0; i < m_array.size(); ++i)
     {
         skJsonType* type = m_array.at(i);
         if (i > 0)
-            dest.append(',');
-
-        type->toString(tStr);
-        dest.append(tStr);
+            dest.write(',');
+        type->toString(dest);
     }
-    dest.append(']');
+
+    dest.write(']');
 }

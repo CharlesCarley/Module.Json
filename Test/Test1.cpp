@@ -1,10 +1,10 @@
+#include "Json/skJsonType.h"
 #include "Json/skJsonArray.h"
 #include "Json/skJsonObject.h"
 #include "Json/skJsonParser.h"
 #include "Json/skJsonPrinter.h"
 #include "Json/skJsonScanner.h"
 #include "Json/skJsonToken.h"
-#include "Json/skJsonType.h"
 #include "TestConfig.h"
 #include "gtest/gtest.h"
 

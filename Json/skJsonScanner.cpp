@@ -183,21 +183,21 @@ void skJsonScanner::scan(skJsonToken& tok)
         case 'f':
         case 'n':
         {
-            if (skStringUtils::equalsn((const char*)&m_data[m_pos - 1], "true", 4) == 0)
+            if (skChar::equalsn((const char*)&m_data[m_pos - 1], "true", 4) == 0)
             {
                 m_pos += 3;
                 tok.setType(skJsonTokenType::JT_BOOL);
                 tok.push("true");
                 return;
             }
-            if (skStringUtils::equalsn((const char*)&m_data[m_pos - 1], "false", 5) == 0)
+            if (skChar::equalsn((const char*)&m_data[m_pos - 1], "false", 5) == 0)
             {
                 m_pos += 4;
                 tok.setType(skJsonTokenType::JT_BOOL);
                 tok.push("false");
                 return;
             }
-            if (skStringUtils::equalsn((const char*)&m_data[m_pos - 1], "null", 4) == 0)
+            if (skChar::equalsn((const char*)&m_data[m_pos - 1], "null", 4) == 0)
             {
                 m_pos += 3;
                 tok.setType(skJsonTokenType::JT_NULL);

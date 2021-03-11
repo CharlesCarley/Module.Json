@@ -59,14 +59,12 @@ public:
         notifyValueChanged();
     }
 
-    void toString(skString& dest) override
+    void toString(skStringBuilder& dest) override
     {
-        dest.reserve(9);
-        dest.resize(0);
         if (!m_address)
-            dest.append("null");
+            dest.write("null");
         else
-            skChar::toString(dest, m_address);
+            dest.write(m_address);
     }
 };
 

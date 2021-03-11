@@ -246,12 +246,20 @@ public:
     /// <param name="def">The default value if the key is not found.</param>
     float getFloat(const skString& key, float def = 0.0);
 
+    /// <summary>
+    /// Returns a string representation of the object.
+    /// </summary>
+    /// <param name="dest">A destination reference</param>
+    void toString(skString& dest) override
+    {
+        skJsonType::toString(dest);
+    }
 
     /// <summary>
     /// Returns a string representation of the object.
     /// </summary>
     /// <param name="dest">A destination reference</param>
-    void toString(skString& dest) override;
+    void toString(skStringBuilder& dest) override;
 
     /// <returns>
     /// Returns an key, value iterator for objects in this object 

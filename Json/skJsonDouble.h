@@ -53,12 +53,9 @@ public:
         notifyValueChanged();
     }
 
-    void toString(skString& dest) override
+    void toString(skStringBuilder& dest) override
     {
-        dest.reserve(16);
-        dest.resize(0);
-
-        skChar::toString(dest, m_double);
+        dest.write(m_double);
     }
 };
 

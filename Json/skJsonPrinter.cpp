@@ -73,7 +73,6 @@ public:
                 first = false;
 
             writeSpace();
-
             m_buffer.write('"');
             m_buffer.write(kv.first);
             m_buffer.write('"');
@@ -93,10 +92,7 @@ public:
                 --m_depth;
             }
             else
-            {
-                kv.second->toString(tStr);
-                m_buffer.write(tStr);
-            }
+                kv.second->toString(m_buffer);
         }
         m_buffer.write('\n');
         if (m_depth-- > 0)
@@ -130,11 +126,7 @@ public:
             else if (idx->isArray())
                 writeArray(idx->asArray());
             else
-            {
-                skString tStr;
-                idx->toString(tStr);
-                m_buffer.write(tStr);
-            }
+                idx->toString(m_buffer);
         }
         m_buffer.write(']');
     }

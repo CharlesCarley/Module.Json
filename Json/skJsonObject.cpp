@@ -162,29 +162,30 @@ void skJsonObject::insert(const skString& key, const void* value)
         m_dictionary.insert(key, new skJsonPointer(value));
 }
 
-void skJsonObject::toString(skString& dest)
+void skJsonObject::toString(skStringBuilder& dest)
 {
-    dest.reserve(128);
-    dest.resize(0);
-    dest.append('{');
+    dest.write('{');
+
+    bool first = true;
 
     Dictionary::Iterator it = m_dictionary.iterator();
     while (it.hasMoreElements())
     {
-        if (dest.at(dest.size() - 1) != '{')
-            dest.append(',');
+        if (!first)
+            dest.write(',');
+        else
+            first = false;
 
         const skString& key = it.peekNextKey();
         skJsonType*     val = it.peekNextValue();
 
-        dest.append('"');
-        dest.append(key);
-        dest.append('"');
-        dest.append(':');
-        dest.append(val->toString());
+        dest.write('"');
+        dest.write(key);
+        dest.write('"');
+        dest.write(':');
+        dest.write(val->toString());
 
         it.next();
     }
-
-    dest.append('}');
+    dest.write('}');
 }

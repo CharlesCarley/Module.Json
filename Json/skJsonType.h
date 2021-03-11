@@ -23,7 +23,7 @@
 #define _skJsonValue_h_
 
 #include "Utils/skString.h"
-#include "Utils/skStringConverter.h"
+#include "Utils/skStringBuilder.h"
 
 class skJsonArray;
 class skJsonObject;
@@ -65,7 +65,7 @@ protected:
     /// Primary constructor, protected to prevent calling it directly.
     /// </summary>
     /// <param name="type"></param>
-    explicit skJsonType(const skJsonType::Type& type) :
+    explicit skJsonType(const Type& type) :
         m_type(type)
     {
     }
@@ -164,7 +164,7 @@ public:
     double getDouble(double defaultValue = 0.0) const
     {
         if (m_type == Type::DOUBLE)
-            return skStringConverter::toDouble(m_value);
+            return skChar::toDouble(m_value);
         return defaultValue;
     }
 
@@ -174,7 +174,7 @@ public:
     bool getBoolean(bool defaultValue = false) const
     {
         if (m_type == Type::BOOLEAN)
-            return skStringConverter::toBool(m_value);
+            return skChar::toBool(m_value);
         return defaultValue;
     }
 
@@ -238,16 +238,27 @@ public:
     /// <returns>Returns a string representation of the object. </returns>
     skString toString()
     {
-        skString cpy;
-        toString(cpy);
-        return cpy;
+        skStringBuilder sb;
+        toString(sb);
+        return sb.toString();
     }
 
     /// <summary>
     /// Returns a string representation of the object.
     /// </summary>
     /// <param name="dest">A destination reference</param>
-    virtual void toString(skString& dest) = 0;
+    virtual void toString(skString& dest)
+    {
+        skStringBuilder sb;
+        toString(sb);
+        sb.toString(dest);
+    }
+
+    /// <summary>
+    /// Returns a string representation of the object.
+    /// </summary>
+    /// <param name="dest">A destination reference</param>
+    virtual void toString(skStringBuilder& dest) = 0;
 };
 
 #endif  //_skJsonValue_h_

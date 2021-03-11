@@ -68,11 +68,9 @@ public:
         notifyValueChanged();
     }
 
-    void toString(skString& dest) override
+    void toString(skStringBuilder& dest) override
     {
-        dest.reserve(32);
-        dest.resize(0);
-        skChar::toString(dest, m_integer.i64);
+        dest.write(m_integer.i64);
     }
 };
 

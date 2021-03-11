@@ -32,19 +32,17 @@ public:
     {
     }
 
-    skJsonString(const skString& str) :
+    explicit skJsonString(const skString& str) :
         skJsonType(Type::STRING)
     {
         setValue(str);
     }
 
-    void toString(skString& dest) override
+    void toString(skStringBuilder& dest) override
     {
-        dest.reserve(m_value.size() + 2);
-        dest.resize(0);
-        dest.append('"');
-        dest.append(m_value);
-        dest.append('"');
+        dest.write('"');
+        dest.write(m_value);
+        dest.write('"');
     }
 };
 
