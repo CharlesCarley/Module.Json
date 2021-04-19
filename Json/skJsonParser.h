@@ -64,6 +64,13 @@ public:
     skJsonType* parse(const skString& path);
 
     /// <summary>
+    /// Attempts to parse the file path as JSON and expects an object to have been supplied.
+    /// </summary>
+    /// <param name="path">File system path</param>
+    skJsonObject* parseObject(const skString& path);
+
+
+    /// <summary>
     /// Attempts to parse the memory as JSON.
     /// </summary>
     /// <param name="src">Memory source</param>

@@ -303,6 +303,12 @@ skJsonType* skJsonParser::parse(const skString& path)
     return parseCommon(scn);
 }
 
+skJsonObject* skJsonParser::parseObject(const skString& path)
+{
+    skJsonType* object = parse(path);
+    return object ? object->asObject() : nullptr;
+}
+
 skJsonType* skJsonParser::parse(const char* src, SKsize sizeInBytes)
 {
     skJsonScanner scn;
