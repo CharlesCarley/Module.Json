@@ -162,6 +162,24 @@ void skJsonObject::insert(const skString& key, const void* value)
         m_dictionary.insert(key, new skJsonPointer(value));
 }
 
+void skJsonObject::getFloatArray(const skString& key, float **dest, int max)
+{
+    skString str;
+    getValueString(str, key);
+
+    skArray<skString> arr;
+    str.split(arr, ',');
+
+    max = skMin<int>(max, arr.size());
+
+    if (dest)
+    {
+        float*& rp = (float*&)*dest;
+        for (int i = 0; i < max; ++i)
+            rp[i] = skChar::toFloat(arr[i]);
+    }
+}
+
 void skJsonObject::toString(skStringBuilder& dest)
 {
     dest.write('{');
@@ -189,3 +207,4 @@ void skJsonObject::toString(skStringBuilder& dest)
     }
     dest.write('}');
 }
+

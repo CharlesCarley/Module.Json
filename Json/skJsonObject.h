@@ -268,6 +268,14 @@ public:
     {
         return m_dictionary.iterator();
     }
+
+    /// <summary>
+    /// Parses the string stored in key as a float array
+    /// </summary>
+    /// <param name="key"></param>
+    /// <param name="dest"></param>
+    /// <param name="max"></param>
+    void getFloatArray(const skString& key, float **dest, int max);
 };
 
 #endif  //_skJsonObject_h_
