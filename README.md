@@ -1,6 +1,6 @@
 # Json
 
-Is a basic C++ json loader.
+Is a basic C++ [json](https://www.json.org/json-en.html) loader.
 
 ## Building
 
