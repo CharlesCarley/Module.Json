@@ -2,24 +2,28 @@
 
 Is a basic C++ json loader.
 
-## Testing
-
-The testing directory is setup to work with [googletest](https://github.com/google/googletest). As well as the initial setup for testing the standalone module using GitHub actions.
-
 ## Building
 
-Building with CMake and Make
+It uses cmake to generate its make files it, and has a dependency on the [Utils](https://github.com/CharlesCarley/Utils) module.
 
-```sh
-mkdir build
-cd build
-cmake ..
-make
-```
 
-Optional defines.
+The file [gitupdate.py](gitupdate.py) will clone the the dependency and update the sub-module to the head of the master branch.
 
-| Option                 | Description                         | Default |
-|:-----------------------|:------------------------------------|:-------:|
+It has been tested with CMake's VisualStudio and Unix Makefile generators.   
+
+### Defines 
+
+Optional definitions used in this project.
+
+
+| Option             | Description                         | Default |
+|:-------------------|:------------------------------------|:-------:|
 | Json_BUILD_TEST    | Build the unit test program.        |   OFF   |
 | Json_AUTO_RUN_TEST | Automatically run the test program. |   OFF   |
+
+
+## Testing 
+
+The testing directory is setup to work with [googletest](https://github.com/google/googletest). 
+
+It also contains the initial setup for testing the standalone module using GitHub actions.
