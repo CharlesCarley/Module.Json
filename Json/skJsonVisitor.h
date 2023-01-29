@@ -19,8 +19,7 @@
   3. This notice may not be removed or altered from any source distribution.
 -------------------------------------------------------------------------------
 */
-#ifndef _skJsonVisitor_h_
-#define _skJsonVisitor_h_
+#pragma once
 
 #include "Utils/skString.h"
 
@@ -142,5 +141,3 @@ public:
     {
     }
 };
-
-#endif  //_skJsonVisitor_h_

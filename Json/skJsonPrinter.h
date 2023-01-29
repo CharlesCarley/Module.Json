@@ -19,8 +19,7 @@
   3. This notice may not be removed or altered from any source distribution.
 -------------------------------------------------------------------------------
 */
-#ifndef _skJsonPrinter_h_
-#define _skJsonPrinter_h_
+#pragma once
 
 #include "Utils/skString.h"
 #include "skJsonToken.h"
@@ -39,5 +38,3 @@ public:
     void writeToStdout(skJsonType* obj) const;
     void writeToString(skString &dest, skJsonType* obj) const;
 };
-
-#endif  //_skJsonPrinter_h_

@@ -19,8 +19,7 @@
   3. This notice may not be removed or altered from any source distribution.
 -------------------------------------------------------------------------------
 */
-#ifndef _skJsonObject_h_
-#define _skJsonObject_h_
+#pragma once
 
 #include "Utils/skMap.h"
 #include "skJsonType.h"
@@ -277,5 +276,3 @@ public:
     /// <param name="max"></param>
     void getFloatArray(const skString& key, float **dest, int max);
 };
-
-#endif  //_skJsonObject_h_

@@ -19,8 +19,7 @@
   3. This notice may not be removed or altered from any source distribution.
 -------------------------------------------------------------------------------
 */
-#ifndef _skJsonParser_h_
-#define _skJsonParser_h_
+#pragma once
 
 #include "skJsonScanner.h"
 #include "skJsonToken.h"
@@ -92,5 +91,3 @@ public:
     /// </returns>
     skJsonType* parse(const char* src, SKsize sizeInBytes);
 };
-
-#endif  //_skJsonParser_h_

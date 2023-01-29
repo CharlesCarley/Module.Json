@@ -19,8 +19,7 @@
   3. This notice may not be removed or altered from any source distribution.
 -------------------------------------------------------------------------------
 */
-#ifndef _skJsonString_h_
-#define _skJsonString_h_
+#pragma once
 
 #include "skJsonType.h"
 
@@ -45,5 +44,3 @@ public:
         dest.write('"');
     }
 };
-
-#endif  //_skJsonString_h_

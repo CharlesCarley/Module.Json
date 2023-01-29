@@ -19,8 +19,7 @@
   3. This notice may not be removed or altered from any source distribution.
 -------------------------------------------------------------------------------
 */
-#ifndef _skJsonArray_h_
-#define _skJsonArray_h_
+#pragma once
 
 #include "Utils/skArray.h"
 #include "skJsonType.h"
@@ -192,5 +191,3 @@ public:
         return m_array.iterator();
     }
 };
-
-#endif  //_skJsonArray_h_

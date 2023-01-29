@@ -19,8 +19,7 @@
   3. This notice may not be removed or altered from any source distribution.
 -------------------------------------------------------------------------------
 */
-#ifndef _skJsonBoolean_h_
-#define _skJsonBoolean_h_
+#pragma once
 
 #include "skJsonType.h"
 
@@ -62,5 +61,3 @@ public:
             dest.write("false", 5);
     }
 };
-
-#endif  //_skJsonBoolean_h_

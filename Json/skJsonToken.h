@@ -19,8 +19,7 @@
   3. This notice may not be removed or altered from any source distribution.
 -------------------------------------------------------------------------------
 */
-#ifndef _skJsonToken_h_
-#define _skJsonToken_h_
+#pragma once
 
 #include "Utils/skString.h"
 
@@ -103,5 +102,3 @@ public:
         m_type = type;
     }
 };
-
-#endif  //_skJsonToken_h_

@@ -19,8 +19,7 @@
   3. This notice may not be removed or altered from any source distribution.
 -------------------------------------------------------------------------------
 */
-#ifndef _skJsonDouble_h_
-#define _skJsonDouble_h_
+#pragma once
 
 #include "skJsonType.h"
 
@@ -58,5 +57,3 @@ public:
         dest.write(m_double);
     }
 };
-
-#endif  //_skJsonDouble_h_

@@ -19,8 +19,7 @@
   3. This notice may not be removed or altered from any source distribution.
 -------------------------------------------------------------------------------
 */
-#ifndef _skJsonScanner_h_
-#define _skJsonScanner_h_
+#pragma once
 
 #include "Utils/skString.h"
 #include "skJsonToken.h"
@@ -65,5 +64,3 @@ public:
         return m_data != nullptr && m_pos != SK_NPOS;
     }
 };
-
-#endif  //_skJsonScanner_h_

@@ -19,8 +19,7 @@
   3. This notice may not be removed or altered from any source distribution.
 -------------------------------------------------------------------------------
 */
-#ifndef _skJsonInteger_h_
-#define _skJsonInteger_h_
+#pragma once
 
 #include "skJsonType.h"
 
@@ -73,5 +72,3 @@ public:
         dest.write(m_integer.i64);
     }
 };
-
-#endif  //_skJsonInteger_h_

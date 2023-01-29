@@ -19,8 +19,7 @@
   3. This notice may not be removed or altered from any source distribution.
 -------------------------------------------------------------------------------
 */
-#ifndef _skJsonPointer_h_
-#define _skJsonPointer_h_
+#pragma once
 
 #include "skJsonType.h"
 

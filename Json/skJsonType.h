@@ -19,8 +19,7 @@
   3. This notice may not be removed or altered from any source distribution.
 -------------------------------------------------------------------------------
 */
-#ifndef _skJsonValue_h_
-#define _skJsonValue_h_
+#pragma once
 
 #include "Utils/skString.h"
 #include "Utils/skStringBuilder.h"
@@ -260,5 +259,3 @@ public:
     /// <param name="dest">A destination reference</param>
     virtual void toString(skStringBuilder& dest) = 0;
 };
-
-#endif  //_skJsonValue_h_
