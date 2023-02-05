@@ -21,39 +21,47 @@
 */
 #pragma once
 
-#include "skJsonType.h"
+#include "Type.h"
 
-class skJsonDouble final : public skJsonType
+namespace Rt2::Json
 {
-private:
-    double m_double;
 
-    void notifyStringChanged() override
+    /// \ingroup Json
+    class BoolType final : public Type
     {
-        m_double = m_value.toDouble();
-    }
+    private:
+        bool _bool;
 
-    void notifyValueChanged() override
-    {
-        skChar::toString(m_value, m_double);
-    }
+        void notifyStringChanged() override
+        {
+            _bool = Char::toBool(_value);
+        }
 
-public:
-    skJsonDouble() :
-        skJsonType(Type::DOUBLE),
-        m_double(0.0)
-    {
-    }
+        void notifyValueChanged() override
+        {
+            Char::toString(_value, _bool);
+        }
 
-    skJsonDouble(const double& v) :
-        skJsonType(Type::DOUBLE),
-        m_double(v)
-    {
-        notifyValueChanged();
-    }
+    public:
+        BoolType() :
+            Type(BOOLEAN),
+            _bool(false)
+        {
+        }
 
-    void toString(skStringBuilder& dest) override
-    {
-        dest.write(m_double);
-    }
-};
+        explicit BoolType(const bool val) :
+            Type(BOOLEAN),
+            _bool(val)
+        {
+            notifyValueChanged();
+        }
+
+        void toString(StringBuilder& dest) override
+        {
+            if (_bool)
+                dest.write("true");
+            else
+                dest.write("false");
+        }
+    };
+}  // namespace Rt2::Json

@@ -19,45 +19,24 @@
   3. This notice may not be removed or altered from any source distribution.
 -------------------------------------------------------------------------------
 */
-#pragma once
+#include "Type.h"
+#include "ArrayType.h"
+#include "ObjectType.h"
 
-#include "skJsonType.h"
-
-/// \ingroup Json
-class skJsonBoolean final : public skJsonType
+namespace Rt2::Json
 {
-private:
-    bool m_bool;
-
-    void notifyStringChanged() override
+    ArrayType* Type::asArray(void)
     {
-        m_bool = m_value.toBoolean();
+        if (_type == ARRAY)
+            return reinterpret_cast<ArrayType*>(this);
+        return nullptr;
     }
 
-    void notifyValueChanged() override
+    ObjectType* Type::asObject(void)
     {
-        skChar::toString(m_value, m_bool);
+        if (_type == OBJECT)
+            return reinterpret_cast<ObjectType*>(this);
+        return nullptr;
     }
 
-public:
-    skJsonBoolean() :
-        skJsonType(Type::BOOLEAN),
-        m_bool(false)
-    {
-    }
-
-    skJsonBoolean(bool val) :
-        skJsonType(Type::BOOLEAN),
-        m_bool(val)
-    {
-        notifyValueChanged();
-    }
-
-    void toString(skStringBuilder& dest) override
-    {
-        if (m_bool)
-            dest.write("true", 4);
-        else
-            dest.write("false", 5);
-    }
-};
+}  // namespace Rt2::Json

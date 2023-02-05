@@ -21,46 +21,30 @@
 */
 #pragma once
 
-#include "Utils/skString.h"
-#include "skJsonToken.h"
+#include "Type.h"
 
-class skJsonScanner
+namespace Rt2::Json
 {
-private:
-    SKint8* m_data;
-    SKsize  m_len;
-    SKsize  m_pos;
 
-    static bool isDigitSet(char ch);
-
-public:
-    skJsonScanner();
-    ~skJsonScanner();
-
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="path">const skString&</param>
-    void open(const skString& path);
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="mem">const char*</param>
-    /// <param name="len">SKsize</param>
-    void open(const char* mem, SKsize len);
-
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="tok">skJsonToken&</param>
-    void scan(skJsonToken& tok);
-
-    /// <summary>
-    ///
-    /// </summary>
-    /// <returns></returns>
-    bool isOpen() const
+    class StringType final : public Type
     {
-        return m_data != nullptr && m_pos != SK_NPOS;
-    }
-};
+    public:
+        StringType() :
+            Type(STRING)
+        {
+        }
+
+        explicit StringType(const String& str) :
+            Type(STRING)
+        {
+            setValue(str);
+        }
+
+        void toString(StringBuilder& dest) override
+        {
+            dest.write('"');
+            dest.write(_value);
+            dest.write('"');
+        }
+    };
+}  // namespace Rt2::Json

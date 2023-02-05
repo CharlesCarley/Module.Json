@@ -21,20 +21,51 @@
 */
 #pragma once
 
-#include "Utils/skString.h"
-#include "skJsonToken.h"
-class skJsonPrinterPrivate;
+#include "Utils/Definitions.h"
+#include "Utils/String.h"
+#include "Token.h"
 
-class skJsonPrinter
+namespace Rt2::Json
 {
-private:
-    skJsonPrinterPrivate* m_private;
 
-public:
-    skJsonPrinter();
-    ~skJsonPrinter();
+    class Scanner
+    {
+    private:
+        char*  _data;
+        size_t _len;
+        size_t _pos;
 
-    void writeToFile(skJsonType* obj, const skString& path) const;
-    void writeToStdout(skJsonType* obj) const;
-    void writeToString(skString &dest, skJsonType* obj) const;
-};
+        static bool isDigitSet(char ch);
+
+    public:
+        Scanner();
+        ~Scanner();
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="path">const String&</param>
+        void open(const String& path);
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="mem">const char*</param>
+        /// <param name="len">size_t</param>
+        void open(const char* mem, size_t len);
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="tok">skJsonToken&</param>
+        void scan(Token& tok);
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <returns></returns>
+        bool isOpen() const
+        {
+            return _data != nullptr && _pos != Npos;
+        }
+    };
+}  // namespace Rt2::Json

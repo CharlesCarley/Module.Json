@@ -21,54 +21,52 @@
 */
 #pragma once
 
-#include "skJsonType.h"
+#include "Type.h"
 
-/// \ingroup Json
-class skJsonInteger final : public skJsonType
+
+namespace Rt2::Json
 {
-private:
-
-    typedef union Integer
+    class PointerType final : public Type
     {
-        SKint16 i16[4];
-        SKint32 i32[2];
-        SKint64 i64;
-        SKuint16 u16[4];
-        SKuint32 u32[2];
-        SKuint64 u64;
-    } Integer;
+    private:
+        size_t _address;
 
+        void notifyStringChanged() override
+        {
+            if (_value == "null")
+                _address = 0;
+            else
+                _address = Char::toUint64(_value);
+        }
 
-    Integer m_integer;
+        void notifyValueChanged() override
+        {
+            if (!_address)
+                _value.assign("null");
+            else
+                Char::toString(_value, _address);
+        }
 
-    void notifyStringChanged() override
-    {
-        m_integer.i64 = m_value.toInt64();
-    }
+    public:
+        PointerType() :
+            Type(POINTER),
+            _address(0)
+        {
+        }
 
-    void notifyValueChanged() override
-    {
-        skChar::toString(m_value, m_integer.i64);
-    }
+        explicit PointerType(const void* vp) :
+            Type(POINTER),
+            _address((size_t)vp)
+        {
+            notifyValueChanged();
+        }
 
-public:
-
-    skJsonInteger() :
-        skJsonType(Type::INTEGER),
-        m_integer({})
-    {
-    }
-
-    skJsonInteger(const SKint64& val) :
-        skJsonType(Type::INTEGER),
-        m_integer({})
-    {
-        m_integer.i64 = val;
-        notifyValueChanged();
-    }
-
-    void toString(skStringBuilder& dest) override
-    {
-        dest.write(m_integer.i64);
-    }
-};
+        void toString(StringBuilder& dest) override
+        {
+            if (!_address)
+                dest.write("null");
+            else
+                dest.write(_address);
+        }
+    };
+}  // namespace Rt2::Json

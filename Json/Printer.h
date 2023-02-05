@@ -21,50 +21,26 @@
 */
 #pragma once
 
-#include "skJsonType.h"
+#include "Utils/String.h"
+#include "Token.h"
 
-class skJsonPointer final : public skJsonType
+namespace Rt2::Json
 {
-private:
-    SKsize m_address;
+    class PrinterPrivate;
 
-    void notifyStringChanged() override
+    class Printer
     {
-        if (m_value.equals("null"))
-            m_address = 0;
-        else
-            m_address = m_value.toUint64();
-    }
+    private:
+        PrinterPrivate* _private;
 
-    void notifyValueChanged() override
-    {
-        if (!m_address)
-            m_value.assign("null");
-        else
-            skChar::toString(m_value, m_address);
-    }
+    public:
+        Printer();
+        ~Printer();
 
-public:
-    skJsonPointer() :
-        skJsonType(Type::POINTER),
-        m_address(0)
-    {
-    }
+        void writeToFile(Type* obj, const String& path) const;
 
-    skJsonPointer(const void* vp) :
-        skJsonType(Type::POINTER),
-        m_address((SKsize)vp)
-    {
-        notifyValueChanged();
-    }
+        void writeToStdout(Type* obj) const;
 
-    void toString(skStringBuilder& dest) override
-    {
-        if (!m_address)
-            dest.write("null");
-        else
-            dest.write(m_address);
-    }
-};
-
-#endif  //_skJsonPointer_h_
+        void writeToString(String& dest, Type* obj) const;
+    };
+}  // namespace Rt2::Json

@@ -1,25 +1,27 @@
-#include "Json/skJsonArray.h"
-#include "Json/skJsonObject.h"
-#include "Json/skJsonParser.h"
-#include "Json/skJsonPrinter.h"
-#include "Json/skJsonScanner.h"
-#include "Json/skJsonToken.h"
-#include "Json/skJsonType.h"
+#include "Json/ArrayType.h"
+#include "Json/ObjectType.h"
+#include "Json/Parser.h"
+#include "Json/Printer.h"
+#include "Json/Scanner.h"
+#include "Json/Token.h"
+#include "Json/Type.h"
 #include "TestConfig.h"
 #include "gtest/gtest.h"
 
 #define MakeTestFile(x) TestDirectory x
+using namespace Rt2::Json;
+
 
 GTEST_TEST(Test1, Token)
 {
-    skJsonToken tok;
-    tok.setType(skJsonTokenType::JT_UNDEFINED);
+    Rt2::Json::Token tok;
+    tok.setType(Rt2::Json::TokenType::JT_UNDEFINED);
     tok.push("A");
 
-    EXPECT_TRUE(tok.getValue().equals("A"));
-    EXPECT_EQ(tok.getType(), skJsonTokenType::JT_UNDEFINED);
+    EXPECT_TRUE(tok.getValue()=="A");
+    EXPECT_EQ(tok.getType(), Rt2::Json::TokenType::JT_UNDEFINED);
     tok.clear();
-    EXPECT_TRUE(tok.getValue().equals(""));
+    EXPECT_TRUE(tok.getValue().empty());
     EXPECT_EQ(tok.getValue().size(), 0);
     EXPECT_LE(tok.getValue().capacity(), 64);
 
@@ -35,162 +37,162 @@ GTEST_TEST(Test1, Token)
     tok.push('l');
     tok.push('d');
     tok.push('!');
-    EXPECT_TRUE(tok.getValue().equals("Hello World!"));
+    EXPECT_TRUE(tok.getValue()== ("Hello World!"));
     EXPECT_EQ(tok.getValue().size(), 12);
     EXPECT_LE(tok.getValue().capacity(), 64);
 }
 
 GTEST_TEST(Test1, ScanTest)
 {
-    skJsonScanner scanner;
+    Scanner scanner;
     scanner.open(MakeTestFile("test2.json"));
     EXPECT_TRUE(scanner.isOpen());
 
-    skJsonToken tok;
+    Token tok;
     scanner.scan(tok);
-    EXPECT_EQ(tok.getType(), skJsonTokenType::JT_L_BRACKET);
+    EXPECT_EQ(tok.getType(), TokenType::JT_L_BRACKET);
 
     scanner.scan(tok);
-    EXPECT_EQ(tok.getType(), skJsonTokenType::JT_STRING);
-    EXPECT_TRUE(tok.getValue().equals("Hello"));
+    EXPECT_EQ(tok.getType(), TokenType::JT_STRING);
+    EXPECT_TRUE(tok.getValue()==("Hello"));
 
     scanner.scan(tok);
-    EXPECT_EQ(tok.getType(), skJsonTokenType::JT_COLON);
+    EXPECT_EQ(tok.getType(), TokenType::JT_COLON);
 
     scanner.scan(tok);
-    EXPECT_EQ(tok.getType(), skJsonTokenType::JT_STRING);
-    EXPECT_TRUE(tok.getValue().equals("World"));
+    EXPECT_EQ(tok.getType(), TokenType::JT_STRING);
+    EXPECT_TRUE(tok.getValue()==("World"));
 
     scanner.scan(tok);
-    EXPECT_EQ(tok.getType(), skJsonTokenType::JT_COMMA);
+    EXPECT_EQ(tok.getType(), TokenType::JT_COMMA);
 
     scanner.scan(tok);
-    EXPECT_EQ(tok.getType(), skJsonTokenType::JT_STRING);
-    EXPECT_TRUE(tok.getValue().equals("abc"));
+    EXPECT_EQ(tok.getType(), TokenType::JT_STRING);
+    EXPECT_TRUE(tok.getValue()==("abc"));
 
     scanner.scan(tok);
-    EXPECT_EQ(tok.getType(), skJsonTokenType::JT_COLON);
+    EXPECT_EQ(tok.getType(), TokenType::JT_COLON);
 
     scanner.scan(tok);
-    EXPECT_EQ(tok.getType(), skJsonTokenType::JT_NUMBER);
-    EXPECT_TRUE(tok.getValue().equals("-123.456"));
+    EXPECT_EQ(tok.getType(), TokenType::JT_NUMBER);
+    EXPECT_TRUE(tok.getValue()==("-123.456"));
 
     scanner.scan(tok);
-    EXPECT_EQ(tok.getType(), skJsonTokenType::JT_COMMA);
+    EXPECT_EQ(tok.getType(), TokenType::JT_COMMA);
 
     scanner.scan(tok);
-    EXPECT_EQ(tok.getType(), skJsonTokenType::JT_STRING);
-    EXPECT_TRUE(tok.getValue().equals("bool0"));
+    EXPECT_EQ(tok.getType(), TokenType::JT_STRING);
+    EXPECT_TRUE(tok.getValue()==("bool0"));
 
     scanner.scan(tok);
-    EXPECT_EQ(tok.getType(), skJsonTokenType::JT_COLON);
+    EXPECT_EQ(tok.getType(), TokenType::JT_COLON);
 
     scanner.scan(tok);
-    EXPECT_EQ(tok.getType(), skJsonTokenType::JT_BOOL);
-    EXPECT_TRUE(tok.getValue().equals("true"));
+    EXPECT_EQ(tok.getType(), TokenType::JT_BOOL);
+    EXPECT_TRUE(tok.getValue()==("true"));
 
     scanner.scan(tok);
-    EXPECT_EQ(tok.getType(), skJsonTokenType::JT_COMMA);
+    EXPECT_EQ(tok.getType(), TokenType::JT_COMMA);
 
     scanner.scan(tok);
-    EXPECT_EQ(tok.getType(), skJsonTokenType::JT_STRING);
-    EXPECT_TRUE(tok.getValue().equals("bool1"));
+    EXPECT_EQ(tok.getType(), TokenType::JT_STRING);
+    EXPECT_TRUE(tok.getValue()==("bool1"));
 
     scanner.scan(tok);
-    EXPECT_EQ(tok.getType(), skJsonTokenType::JT_COLON);
+    EXPECT_EQ(tok.getType(), TokenType::JT_COLON);
 
     scanner.scan(tok);
-    EXPECT_EQ(tok.getType(), skJsonTokenType::JT_BOOL);
-    EXPECT_TRUE(tok.getValue().equals("false"));
+    EXPECT_EQ(tok.getType(), TokenType::JT_BOOL);
+    EXPECT_TRUE(tok.getValue()==("false"));
 
     scanner.scan(tok);
-    EXPECT_EQ(tok.getType(), skJsonTokenType::JT_COMMA);
+    EXPECT_EQ(tok.getType(), TokenType::JT_COMMA);
 
     scanner.scan(tok);
-    EXPECT_EQ(tok.getType(), skJsonTokenType::JT_STRING);
-    EXPECT_TRUE(tok.getValue().equals("null"));
+    EXPECT_EQ(tok.getType(), TokenType::JT_STRING);
+    EXPECT_TRUE(tok.getValue()==("null"));
 
     scanner.scan(tok);
-    EXPECT_EQ(tok.getType(), skJsonTokenType::JT_COLON);
+    EXPECT_EQ(tok.getType(), TokenType::JT_COLON);
 
     scanner.scan(tok);
-    EXPECT_EQ(tok.getType(), skJsonTokenType::JT_NULL);
-    EXPECT_TRUE(tok.getValue().equals("null"));
+    EXPECT_EQ(tok.getType(), TokenType::JT_NULL);
+    EXPECT_TRUE(tok.getValue()==("null"));
 
     scanner.scan(tok);
-    EXPECT_EQ(tok.getType(), skJsonTokenType::JT_COMMA);
+    EXPECT_EQ(tok.getType(), TokenType::JT_COMMA);
 
     scanner.scan(tok);
-    EXPECT_EQ(tok.getType(), skJsonTokenType::JT_STRING);
-    EXPECT_TRUE(tok.getValue().equals("array"));
+    EXPECT_EQ(tok.getType(), TokenType::JT_STRING);
+    EXPECT_TRUE(tok.getValue()==("array"));
 
     scanner.scan(tok);
-    EXPECT_EQ(tok.getType(), skJsonTokenType::JT_COLON);
+    EXPECT_EQ(tok.getType(), TokenType::JT_COLON);
 
     scanner.scan(tok);
-    EXPECT_EQ(tok.getType(), skJsonTokenType::JT_L_BRACE);
+    EXPECT_EQ(tok.getType(), TokenType::JT_L_BRACE);
 
     scanner.scan(tok);
-    EXPECT_EQ(tok.getType(), skJsonTokenType::JT_STRING);
-    EXPECT_TRUE(tok.getValue().equals("a"));
+    EXPECT_EQ(tok.getType(), TokenType::JT_STRING);
+    EXPECT_TRUE(tok.getValue()==("a"));
 
     scanner.scan(tok);
-    EXPECT_EQ(tok.getType(), skJsonTokenType::JT_COMMA);
+    EXPECT_EQ(tok.getType(), TokenType::JT_COMMA);
 
     scanner.scan(tok);
-    EXPECT_EQ(tok.getType(), skJsonTokenType::JT_INTEGER);
-    EXPECT_TRUE(tok.getValue().equals("1"));
+    EXPECT_EQ(tok.getType(), TokenType::JT_INTEGER);
+    EXPECT_TRUE(tok.getValue()==("1"));
 
     scanner.scan(tok);
-    EXPECT_EQ(tok.getType(), skJsonTokenType::JT_COMMA);
+    EXPECT_EQ(tok.getType(), TokenType::JT_COMMA);
 
     scanner.scan(tok);
-    EXPECT_EQ(tok.getType(), skJsonTokenType::JT_BOOL);
-    EXPECT_TRUE(tok.getValue().equals("false"));
+    EXPECT_EQ(tok.getType(), TokenType::JT_BOOL);
+    EXPECT_TRUE(tok.getValue()==("false"));
 
     scanner.scan(tok);
-    EXPECT_EQ(tok.getType(), skJsonTokenType::JT_COMMA);
+    EXPECT_EQ(tok.getType(), TokenType::JT_COMMA);
 
     scanner.scan(tok);
-    EXPECT_EQ(tok.getType(), skJsonTokenType::JT_NULL);
-    EXPECT_TRUE(tok.getValue().equals("null"));
+    EXPECT_EQ(tok.getType(), TokenType::JT_NULL);
+    EXPECT_TRUE(tok.getValue()==("null"));
 
     scanner.scan(tok);
-    EXPECT_EQ(tok.getType(), skJsonTokenType::JT_R_BRACE);
+    EXPECT_EQ(tok.getType(), TokenType::JT_R_BRACE);
 
     scanner.scan(tok);
-    EXPECT_EQ(tok.getType(), skJsonTokenType::JT_R_BRACKET);
+    EXPECT_EQ(tok.getType(), TokenType::JT_R_BRACKET);
 
     scanner.scan(tok);
-    EXPECT_EQ(tok.getType(), skJsonTokenType::JT_NULL);
+    EXPECT_EQ(tok.getType(), TokenType::JT_NULL);
 }
 
 GTEST_TEST(Test1, ParseTest)
 {
-    skJsonParser parser;
+    Parser parser;
 
-    skJsonType* nObj = parser.parse(MakeTestFile("test2.json"));
+    Type* nObj = parser.parse(MakeTestFile("test2.json"));
     EXPECT_NE(nObj, nullptr);
-    EXPECT_EQ(nObj->getType(), skJsonType::Type::OBJECT);
+    EXPECT_EQ(nObj->getType(), Type::Type::OBJECT);
 
-    skJsonObject* obj = (skJsonObject*)nObj;
+    ObjectType* obj = (ObjectType*)nObj;
 
     EXPECT_TRUE(obj->hasKey("Hello"));
 
-    skJsonType* type = obj->getValue("Hello");
+    Type* type = obj->getValue("Hello");
     EXPECT_NE(type, nullptr);
-    EXPECT_EQ(type->getType(), skJsonType::Type::STRING);
-    EXPECT_TRUE(type->getString().equals("World"));
+    EXPECT_EQ(type->getType(), Type::Type::STRING);
+    EXPECT_TRUE(type->getString()==("World"));
 
     EXPECT_TRUE(obj->hasKey("abc"));
 
     type = obj->getValue("abc");
     EXPECT_NE(type, nullptr);
-    EXPECT_EQ(type->getType(), skJsonType::Type::DOUBLE);
+    EXPECT_EQ(type->getType(), Type::Type::DOUBLE);
     EXPECT_EQ(type->getDouble(), -123.456);
 }
 
-void Test3ValidateObject(skJsonObject* nObj, bool testArray)
+void Test3ValidateObject(ObjectType* nObj, bool testArray)
 {
     EXPECT_TRUE(nObj->hasKey("A"));
     EXPECT_TRUE(nObj->hasKey("B"));
@@ -205,8 +207,8 @@ void Test3ValidateObject(skJsonObject* nObj, bool testArray)
         EXPECT_TRUE(nObj->hasKey("E"));
     }
 
-    const skString& a = nObj->getValue("A")->getString();
-    EXPECT_TRUE(a.equals("String"));
+    const Rt2::String& a = nObj->getValue("A")->getString();
+    EXPECT_TRUE(a==("String"));
 
     const bool c = nObj->getValue("C")->getBoolean();
     EXPECT_TRUE(c);
@@ -226,56 +228,56 @@ void Test3ValidateObject(skJsonObject* nObj, bool testArray)
 
     if (testArray)
     {
-        skJsonType* type = nObj->getValue("E");
+        Type* type = nObj->getValue("E");
         EXPECT_TRUE(type->isArray());
         EXPECT_EQ(3, type->asArray()->size());
 
         for (int i = 0; i < 3; ++i)
         {
-            skJsonType* obj = type->asArray()->at(i);
+            Type* obj = type->asArray()->at(i);
             EXPECT_NE(obj, nullptr);
             EXPECT_TRUE(obj->isObject());
 
-            skJsonObject* tObj = obj->asObject();
+            ObjectType* tObj = obj->asObject();
             Test3ValidateObject(tObj, false);
         }
     }
 }
 
-void Test3Validate(skJsonArray* arr)
+void Test3Validate(ArrayType* arr)
 {
     EXPECT_EQ(3, arr->size());
 
     for (int i = 0; i < 3; ++i)
     {
-        skJsonType* obj = arr->at(i);
+        Type* obj = arr->at(i);
         EXPECT_NE(obj, nullptr);
         EXPECT_TRUE(obj->isObject());
-        skJsonObject* tObj = obj->asObject();
+        ObjectType* tObj = obj->asObject();
         Test3ValidateObject(tObj, true);
     }
 }
 
 GTEST_TEST(Test1, ParseTestTest3)
 {
-    skJsonParser parser;
-    skJsonType*  nObj = parser.parse(MakeTestFile("test3.json"));
+    Parser parser;
+    Type*  nObj = parser.parse(MakeTestFile("test3.json"));
 
     EXPECT_NE(nObj, nullptr);
     EXPECT_TRUE(nObj->isArray());
 
-    skJsonArray* arr = nObj->asArray();
+    ArrayType* arr = nObj->asArray();
     Test3Validate(arr);
 }
 
 GTEST_TEST(Test1, Parse4)
 {
-    skJsonParser parser;
-    skJsonType*  nObj = parser.parse(MakeTestFile("test4.json"));
+    Parser parser;
+    Type*  nObj = parser.parse(MakeTestFile("test4.json"));
     EXPECT_NE(nObj, nullptr);
-    EXPECT_EQ(nObj->getType(), skJsonType::Type::ARRAY);
+    EXPECT_EQ(nObj->getType(), Type::Type::ARRAY);
 
-    skJsonArray* arr = (skJsonArray*)nObj;
+    ArrayType* arr = (ArrayType*)nObj;
     EXPECT_EQ(7, arr->size());
     EXPECT_EQ(0, arr->int16(0));
     EXPECT_EQ(1, arr->int16(1));
@@ -283,33 +285,33 @@ GTEST_TEST(Test1, Parse4)
     EXPECT_EQ(3, arr->int16(3));
     EXPECT_EQ(4, arr->int16(4));
     EXPECT_EQ(5, arr->int16(5));
-    EXPECT_TRUE(arr->at(6)->getString().equals("Hello"));
+    EXPECT_TRUE(arr->at(6)->getString()==("Hello"));
 }
 
 GTEST_TEST(Test2, CreateObjectAndReflect)
 {
-    skJsonObject obj;
+    ObjectType obj;
     obj.insert("a", 123);
 
-    skString actual;
+    Rt2::String actual;
     obj.toString(actual);
 
-    const skString expected1 = R"({"a":123})";
-    EXPECT_TRUE(expected1.equals(actual));
+    const Rt2::String expected1 = R"({"a":123})";
+    EXPECT_TRUE(expected1==(actual));
 
     obj.insert("b", 456);
     obj.insert("c", 789);
 
-    const skString expected2 = R"({"a":123,"b":456,"c":789})";
+    const Rt2::String expected2 = R"({"a":123,"b":456,"c":789})";
     obj.toString(actual);
-    EXPECT_TRUE(expected2.equals(actual));
+    EXPECT_TRUE(expected2==(actual));
 
-    skJsonParser parser;
-    skJsonType*  type = parser.parse(expected2.c_str(), expected2.size());
+    Parser parser;
+    Type*  type = parser.parse(expected2.c_str(), expected2.size());
     EXPECT_NE(type, nullptr);
     EXPECT_TRUE(type->isObject());
 
-    skJsonObject* jObj = type->asObject();
+    ObjectType* jObj = type->asObject();
     EXPECT_TRUE(jObj->hasKey("a"));
     EXPECT_TRUE(jObj->hasKey("b"));
     EXPECT_TRUE(jObj->hasKey("c"));
@@ -321,7 +323,7 @@ GTEST_TEST(Test2, CreateObjectAndReflect)
 
 GTEST_TEST(Test2, CreateArrayAndReflect)
 {
-    skJsonArray obj;
+    ArrayType obj;
     obj.add(0);
     obj.add(1);
     obj.add(2);
@@ -329,27 +331,27 @@ GTEST_TEST(Test2, CreateArrayAndReflect)
     obj.add(4);
     obj.add(5);
 
-    skString actual;
+    Rt2::String actual;
     obj.toString(actual);
 
-    const skString expected1 = "[0,1,2,3,4,5]";
-    EXPECT_TRUE(expected1.equals(actual));
+    const Rt2::String expected1 = "[0,1,2,3,4,5]";
+    EXPECT_TRUE(expected1==(actual));
 
     obj.add(6);
     obj.add(7);
     obj.add(8);
     obj.add(9);
 
-    const skString expected2 = "[0,1,2,3,4,5,6,7,8,9]";
+    const Rt2::String expected2 = "[0,1,2,3,4,5,6,7,8,9]";
     obj.toString(actual);
-    EXPECT_TRUE(expected2.equals(actual));
+    EXPECT_TRUE(expected2==(actual));
 
-    skJsonParser parser;
-    skJsonType*  type = parser.parse(expected2.c_str(), expected2.size());
+    Parser parser;
+    Type*  type = parser.parse(expected2.c_str(), expected2.size());
     EXPECT_NE(type, nullptr);
     EXPECT_TRUE(type->isArray());
 
-    skJsonArray* jObj = type->asArray();
+    ArrayType* jObj = type->asArray();
     EXPECT_EQ(0, jObj->int16(0));
     EXPECT_EQ(1, jObj->int16(1));
     EXPECT_EQ(2, jObj->int16(2));
@@ -364,38 +366,38 @@ GTEST_TEST(Test2, CreateArrayAndReflect)
 
 GTEST_TEST(Test2, PrintFormated)
 {
-    skJsonObject obj;
+    ObjectType obj;
     obj.insert("a", 123);
     obj.insert("b", 456);
     obj.insert("c", 789);
 
-    skJsonPrinter print;
+    Printer print;
     print.writeToStdout(&obj);
 
-    skJsonParser parser;
-    skJsonType*  nObj = parser.parse(MakeTestFile("test3.json"));
+    Parser parser;
+    Type*  nObj = parser.parse(MakeTestFile("test3.json"));
 
     print.writeToStdout(nObj);
 }
 
 GTEST_TEST(Test2, Test3Reflect)
 {
-    skJsonParser parser;
-    skJsonType*  nObj = parser.parse(MakeTestFile("test3.json"));
+    Parser parser;
+    Type*  nObj = parser.parse(MakeTestFile("test3.json"));
 
     EXPECT_NE(nObj, nullptr);
     EXPECT_TRUE(nObj->isArray());
 
     // validate initially
-    skJsonArray* arr = nObj->asArray();
+    ArrayType* arr = nObj->asArray();
     Test3Validate(arr);
 
     // validate compactly
 
-    const skString rp1s = nObj->toString();
+    const Rt2::String rp1s = nObj->toString();
 
-    skJsonParser reparse1;
-    skJsonType*  rp1 = reparse1.parse(rp1s.c_str(), rp1s.size());
+    Parser reparse1;
+    Type*  rp1 = reparse1.parse(rp1s.c_str(), rp1s.size());
 
     EXPECT_NE(rp1, nullptr);
     EXPECT_TRUE(rp1->isArray());
@@ -403,12 +405,12 @@ GTEST_TEST(Test2, Test3Reflect)
 
     // validate formatted;
 
-    skString      rp2s;
-    skJsonPrinter print;
+    Rt2::String      rp2s;
+    Printer print;
     print.writeToString(rp2s, nObj);
 
-    skJsonParser reparse2;
-    skJsonType*  rp2 = reparse1.parse(rp2s.c_str(), rp2s.size());
+    Parser reparse2;
+    Type*  rp2 = reparse1.parse(rp2s.c_str(), rp2s.size());
 
     EXPECT_NE(rp2, nullptr);
     EXPECT_TRUE(rp2->isArray());

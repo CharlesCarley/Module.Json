@@ -19,26 +19,28 @@
   3. This notice may not be removed or altered from any source distribution.
 -------------------------------------------------------------------------------
 */
-#include "skJsonToken.h"
+#include "Token.h"
 
-skJsonToken::skJsonToken() :
-    m_type(skJsonTokenType::JT_UNDEFINED)
+namespace Rt2::Json
 {
-    m_value.reserve(63);
-}
+    Token::Token() :
+        _type(TokenType::JT_UNDEFINED)
+    {
+    }
 
+    void Token::push(const char value)
+    {
+        _value.push_back(value);
+    }
 
-void skJsonToken::push(const char value)
-{
-    m_value.append(value);
-}
+    void Token::push(const String& value)
+    {
+        _value.append(value);
+    }
 
-void skJsonToken::push(const skString& value)
-{
-    m_value.append(value);
-}
-
-void skJsonToken::clear(void)
-{
-    m_value.resize(0);
-}
+    void Token::clear()
+    {
+        _type = TokenType::JT_NULL;
+        _value.clear();
+    }
+}  // namespace Rt2::Json

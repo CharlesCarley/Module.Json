@@ -20,27 +20,44 @@
 -------------------------------------------------------------------------------
 */
 #pragma once
+#include "Type.h"
 
-#include "skJsonType.h"
 
-class skJsonString final : public skJsonType
+namespace Rt2::Json
 {
-public:
-    skJsonString() :
-        skJsonType(Type::STRING)
-    {
-    }
 
-    explicit skJsonString(const skString& str) :
-        skJsonType(Type::STRING)
+    class DoubleType final : public Type
     {
-        setValue(str);
-    }
+    private:
+        double _double;
 
-    void toString(skStringBuilder& dest) override
-    {
-        dest.write('"');
-        dest.write(m_value);
-        dest.write('"');
-    }
-};
+        void notifyStringChanged() override
+        {
+            _double = Char::toDouble(_value);
+        }
+
+        void notifyValueChanged() override
+        {
+            Char::toString(_value, _double);
+        }
+
+    public:
+        DoubleType() :
+            Type(DOUBLE),
+            _double(0.0)
+        {
+        }
+
+        explicit DoubleType(const double& v) :
+            Type(DOUBLE),
+            _double(v)
+        {
+            notifyValueChanged();
+        }
+
+        void toString(StringBuilder& dest) override
+        {
+            dest.write(_double);
+        }
+    };
+}  // namespace Rt2::Json

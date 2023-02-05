@@ -19,28 +19,57 @@
   3. This notice may not be removed or altered from any source distribution.
 -------------------------------------------------------------------------------
 */
-#include "skJsonType.h"
-#include "skJsonArray.h"
-#include "skJsonObject.h"
+#pragma once
 
-/// <summary>
-/// Attempts to cast to an array
-/// </summary>
-/// <returns>skJsonArray or null if the type is not an array</returns>
-skJsonArray* skJsonType::asArray(void)
-{
-    if (m_type == Type::ARRAY)
-        return reinterpret_cast<skJsonArray*>(this);
-    return nullptr;
-}
+#include "Type.h"
 
-/// <summary>
-/// Attempts to cast to an object
-/// </summary>
-/// <returns>skJsonObject or null if the type is not an object</returns>
-skJsonObject* skJsonType::asObject(void)
+namespace Rt2::Json
 {
-    if (m_type == Type::OBJECT)
-        return reinterpret_cast<skJsonObject*>(this);
-    return nullptr;
-}
+
+    /// \ingroup Json
+    class IntegerType final : public Type
+    {
+    private:
+        typedef union Integer
+        {
+            I16 i16[4];
+            I32 i32[2];
+            I64 i64;
+            U16 u16[4];
+            U32 u32[2];
+            U64 u64;
+        } Integer;
+
+        Integer _integer;
+
+        void notifyStringChanged() override
+        {
+            _integer.i64 = Char::toInt64(_value);
+        }
+
+        void notifyValueChanged() override
+        {
+            Char::toString(_value, _integer.i64);
+        }
+
+    public:
+        IntegerType() :
+            Type(INTEGER),
+            _integer({})
+        {
+        }
+
+        explicit IntegerType(const I64& val) :
+            Type(INTEGER),
+            _integer({})
+        {
+            _integer.i64 = val;
+            notifyValueChanged();
+        }
+
+        void toString(StringBuilder& dest) override
+        {
+            dest.write(_integer.i64);
+        }
+    };
+}  // namespace Rt2::Json
