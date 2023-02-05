@@ -21,7 +21,7 @@
 */
 #pragma once
 
-#include "Type.h"
+#include "Json/Type.h"
 
 namespace Rt2::Json
 {

@@ -22,6 +22,7 @@
 #pragma once
 
 #include "Utils/String.h"
+
 namespace Rt2::Json
 {
 

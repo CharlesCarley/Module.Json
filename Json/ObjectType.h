@@ -21,7 +21,7 @@
 */
 #pragma once
 
-#include "Type.h"
+#include "Json/Type.h"
 #include "Utils/HashMap.h"
 #include "Utils/String.h"
 

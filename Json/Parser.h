@@ -21,8 +21,8 @@
 */
 #pragma once
 
-#include "Scanner.h"
-#include "Token.h"
+#include "Json/Scanner.h"
+#include "Json/Token.h"
 
 namespace Rt2::Json
 {

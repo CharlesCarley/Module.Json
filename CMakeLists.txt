@@ -12,7 +12,8 @@ list(APPEND
     ${Json_SOURCE_DIR}/CMake          # (specific) Local to project
     ${Json_SOURCE_DIR}/CMake/Modules  # (generic)  Global to all projects
 )
-include(Configure)
+
+include(${Json_SOURCE_DIR}/CMake/Configure.cmake)
 
 if (Json_ExternalTarget)
     set(TargetFolders ${Json_TargetFolders})
@@ -20,7 +21,7 @@ if (Json_ExternalTarget)
     set(TargetGroup   ${Json_TargetGroup})
 else()
     add_subdirectory(CMake)
-    add_subdirectory(Internal/Utils/Utils)
+    add_subdirectory(Internal/Utils)
 
     set(TargetFolders TRUE)
 
@@ -32,12 +33,14 @@ endif()
 add_subdirectory(Json)
 
 if (Json_BUILD_TEST)
-    set(GTEST_INCLUDE ${Json_SOURCE_DIR}/Test/googletest/googletest/include)
-    set(GTEST_LIBRARY gtest_main)
+    if (NOT Json_ExternalTarget)
+        set(TargetGroup Extern/ThirdParty)
 
-    set(BUILD_GMOCK   OFF CACHE BOOL "" FORCE)
-    set(INSTALL_GTEST OFF CACHE BOOL "" FORCE)
+        add_subdirectory(${GTEST_DIR})
+        set_target_properties(gtest_main PROPERTIES FOLDER "${TargetGroup}")
+        set_target_properties(gtest      PROPERTIES FOLDER "${TargetGroup}")
+    endif()
 
-    add_subdirectory(Test/googletest)
+    set(TargetGroup Units)
     add_subdirectory(Test)
 endif()

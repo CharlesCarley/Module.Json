@@ -92,7 +92,7 @@ namespace Rt2::Json
             clear();
         }
 
-        Type* getRoot() override
+        Type* root() override
         {
             if (!_finishedObjects.empty())
             {
@@ -277,12 +277,12 @@ namespace Rt2::Json
         if (tok.getType() == TokenType::JT_L_BRACKET)
         {
             parseObject(scanner, tok);
-            root = _visitor->getRoot();
+            root = _visitor->root();
         }
         else if (tok.getType() == TokenType::JT_L_BRACE)
         {
             parseArray(scanner, tok);
-            root = _visitor->getRoot();
+            root = _visitor->root();
         }
         else
             root = nullptr;

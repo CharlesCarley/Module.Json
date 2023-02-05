@@ -22,6 +22,7 @@
 #pragma once
 
 #include "Utils/String.h"
+
 namespace Rt2::Json
 {
 
@@ -36,7 +37,7 @@ namespace Rt2::Json
         ///
         /// </summary>
         /// <returns></returns>
-        virtual Type* getRoot()
+        virtual Type* root()
         {
             return nullptr;
         }

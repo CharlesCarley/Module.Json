@@ -21,8 +21,7 @@
 */
 #pragma once
 
-#include "Utils/String.h"
-#include "Token.h"
+#include "Json/Type.h"
 
 namespace Rt2::Json
 {
