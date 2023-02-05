@@ -3,7 +3,7 @@
 	url = https://github.com/CharlesCarley/googletest.git
 [submodule "Internal/Utils"]
 	path = Internal/Utils
-	url = https://github.com/CharlesCarley/Internal.Utils
+	url = git@github.com:CharlesCarley/Internal.Utils.git
 [submodule "CMake/Modules"]
 	path = CMake/Modules
 	url = https://github.com/CharlesCarley/CMakeModules.git
