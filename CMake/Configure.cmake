@@ -7,8 +7,9 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 option(Json_BUILD_TEST     "Build the unit test program." ON)
 option(Json_AUTO_RUN_TEST  "Automatically run the test program." OFF)
 option(Json_JUST_MY_CODE   "Enable the /JMC flag" ON)
+option(Json_OPEN_MP        "Enable low-level fill and copy using OpenMP" ON)
 
-set(ExternalTarget_LOG ON)
+set(ExternalTarget_LOG OFF)
 
 set(BUILD_GMOCK   OFF CACHE BOOL "" FORCE)
 set(INSTALL_GTEST OFF CACHE BOOL "" FORCE)
@@ -41,9 +42,14 @@ if (MSVC)
         # Enable just my code...
         set(ExtraFlags "${ExtraFlags} /JMC")
     endif ()
+
     set(ExtraFlags "${ExtraFlags} /fp:precise")
     set(ExtraFlags "${ExtraFlags} /fp:except")
-    set(ExtraFlags "${ExtraFlags} /openmp")
+
+    if (Json_OPEN_MP)
+        add_definitions(-DRT_OPEN_MP=1)
+        set(ExtraFlags "${ExtraFlags} /openmp")
+    endif()
 
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${ExtraFlags}")
 
@@ -51,9 +57,13 @@ else ()
     set(ExtraFlags "${ExtraFlags} -Os")
     set(ExtraFlags "${ExtraFlags} -O3")
     set(ExtraFlags "${ExtraFlags} -fPIC")
+
+    if (Json_OPEN_MP)
+        add_definitions(-DRT_OPEN_MP=1)
+        set(ExtraFlags "${ExtraFlags} -fopenmp")
+    endif()
     
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${ExtraFlags}")
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} stdc++fs")
 endif ()
 
 message(STATUS "Extra global flags: ${ExtraFlags}")
