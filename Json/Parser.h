@@ -50,20 +50,21 @@ namespace Rt2::Json
         /// </summary>
         /// <param name="path">File system path</param>
         /// <returns>
-        /// Returns a skJsonType object.
-        ///
-        /// If the root object in the script is opened with a bracket then a
-        /// skJsonObject is returned. <code>
-        /// {
-        ///     "Key": "Value"
-        /// }
-        /// </code>
-        /// If the root object in the script is opened with a brace
-        /// then a skJsonArray is returned.
-        /// <code> [1, 2, 3] </code>
-        ///
-        /// use skJsonType methods to determine the underlying type.
+        /// Returns a pointer to the base class Type object.
         /// </returns>
+        ///
+        /// <remarks>
+        ///
+        /// If the root object in the script is opened with a bracket (
+        /// <code> { "Key": "Value" } </code> ) then a
+        /// ObjectType is returned.
+        /// But, if the root object in the script is opened with a brace (
+        /// <code> [1, 2, 3] </code>)
+        /// then a ArrayType is returned.
+        ///
+        /// Use the methods defined in the Type class to determine the
+        /// underlying type for casting to the proper class.
+        /// </remarks>
         Type* parse(const String& path);
 
         /// <summary>
@@ -77,21 +78,6 @@ namespace Rt2::Json
         /// </summary>
         /// <param name="src">Memory source</param>
         /// <param name="sizeInBytes">The size of the source memory in bytes</param>
-        /// <returns>
-        /// Returns a skJsonType object.
-        ///
-        /// If the root object in the script is opened with a bracket then a
-        /// skJsonObject is returned. <code>
-        /// {
-        ///     "Key": "Value"
-        /// }
-        /// </code>
-        /// If the root object in the script is opened with a brace
-        /// then a skJsonArray is returned.
-        /// <code> [1, 2, 3] </code>
-        ///
-        /// use skJsonType methods to determine the underlying type.
-        /// </returns>
         Type* parse(const char* src, size_t sizeInBytes);
     };
 }  // namespace Rt2::Json

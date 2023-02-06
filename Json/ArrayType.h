@@ -124,10 +124,7 @@ namespace Rt2::Json
         /// <summary>
         /// Returns the number of elements in the array.
         /// </summary>
-        U32 size(void) const
-        {
-            return _array.size();
-        }
+        U32 size() const;
 
         /// <summary>
         /// Get the array element at the supplied index.
@@ -145,12 +142,12 @@ namespace Rt2::Json
         /// <param name="i">The array position to access</param>
         /// <param name="def">Is the return value on any error condition.</param>
         /// <returns>An integer or the supplied default if the index is null or out of bounds. </returns>
-        I16 int16(const U32 i, const I16 def = -1)
+        I16 i16(const U32 i, const I16 def = -1)
         {
             const Type* type = at(i);
             if (!type || !type->isInteger())
                 return def;
-            return type->getInt16(def);
+            return type->i16(def);
         }
 
         /// <summary>
@@ -159,12 +156,12 @@ namespace Rt2::Json
         /// <param name="i">The array position to access</param>
         /// <param name="def">Is the return value on any error condition.</param>
         /// <returns>An integer or the supplied default if the index is null or out of bounds. </returns>
-        I32 int32(const U32 i, const I32 def = -1)
+        I32 i32(const U32 i, const I32 def = -1)
         {
             const Type* type = at(i);
             if (!type || !type->isInteger())
                 return def;
-            return type->getInt32(def);
+            return type->i32(def);
         }
 
         /// <summary>
@@ -173,12 +170,12 @@ namespace Rt2::Json
         /// <param name="i">The array position to access</param>
         /// <param name="def">Is the return value on any error condition.</param>
         /// <returns>An integer or the supplied default if the index is null or out of bounds. </returns>
-        I64 int64(const U32 i, const I64 def = -1)
+        I64 i64(const U32 i, const I64 def = -1)
         {
             const Type* type = at(i);
             if (!type || !type->isInteger())
                 return def;
-            return type->getInt64(def);
+            return type->i64(def);
         }
 
         void toString(String& dest) override
@@ -188,4 +185,10 @@ namespace Rt2::Json
 
         void toString(StringBuilder& dest) override;
     };
+
+    inline U32 ArrayType::size() const
+    {
+        return _array.size();
+    }
+
 }  // namespace Rt2::Json

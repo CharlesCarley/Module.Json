@@ -36,7 +36,6 @@ namespace Rt2::Json
     {
         for (const auto& el : _dictionary)
             delete el.second;
-
         _dictionary.clear();
     }
 
@@ -51,71 +50,71 @@ namespace Rt2::Json
         return _dictionary.find(key) != Npos;
     }
 
-    Type* ObjectType::getValue(const String& key)
+    Type* ObjectType::find(const String& key)
     {
-        const size_t pos = _dictionary.find(key);
-        if (pos != Npos)
+        if (const size_t pos = _dictionary.find(key);
+            pos != Npos)
             return _dictionary.at(pos);
         return nullptr;
     }
 
-    void ObjectType::getValueString(String& dest, const String& key, const String& def)
+    void ObjectType::string(String& dest, const String& key, const String& def)
     {
-        const size_t pos = _dictionary.find(key);
-        if (pos != Npos)
-            dest.assign(_dictionary.at(pos)->getString());
+        if (const size_t pos = _dictionary.find(key);
+            pos != Npos)
+            dest.assign(_dictionary.at(pos)->string());
         else
             dest.assign(def);
     }
 
-    void ObjectType::getValueInt(I64& dest, const String& key, const I64& def)
+    void ObjectType::integer(I64& dest, const String& key, const I64& def)
     {
-        const size_t pos = _dictionary.find(key);
-        if (pos != Npos)
-            dest = _dictionary.at(pos)->getInt64(def);
+        if (const size_t pos = _dictionary.find(key);
+            pos != Npos)
+            dest = _dictionary.at(pos)->i64(def);
         else
             dest = def;
     }
 
-    void ObjectType::getValueInt(I32& dest, const String& key, const I32& def)
+    void ObjectType::integer(I32& dest, const String& key, const I32& def)
     {
-        const size_t pos = _dictionary.find(key);
-        if (pos != Npos)
-            dest = _dictionary.at(pos)->getInt32(def);
+        if (const size_t pos = _dictionary.find(key);
+            pos != Npos)
+            dest = _dictionary.at(pos)->i32(def);
         else
             dest = def;
     }
 
-    void ObjectType::getValueInt(I16& dest, const String& key, const I16& def)
+    void ObjectType::integer(I16& dest, const String& key, const I16& def)
     {
-        const size_t pos = _dictionary.find(key);
-        if (pos != Npos)
-            dest = _dictionary.at(pos)->getInt16(def);
+        if (const size_t pos = _dictionary.find(key);
+            pos != Npos)
+            dest = _dictionary.at(pos)->i16(def);
         else
             dest = def;
     }
 
-    bool ObjectType::getBoolean(const String& key, bool def)
+    bool ObjectType::boolean(const String& key, const bool def)
     {
-        const size_t pos = _dictionary.find(key);
-        if (pos != Npos)
-            return _dictionary.at(pos)->getBoolean(def);
+        if (const size_t pos = _dictionary.find(key);
+            pos != Npos)
+            return _dictionary.at(pos)->boolean(def);
         return def;
     }
 
-    double ObjectType::getDouble(const String& key, double def)
+    double ObjectType::r64(const String& key, const double def)
     {
-        const size_t pos = _dictionary.find(key);
-        if (pos != Npos)
-            return _dictionary.at(pos)->getDouble(def);
+        if (const size_t pos = _dictionary.find(key);
+            pos != Npos)
+            return _dictionary.at(pos)->r64(def);
         return def;
     }
 
-    float ObjectType::getFloat(const String& key, float def)
+    float ObjectType::r32(const String& key, const float def)
     {
-        const size_t pos = _dictionary.find(key);
-        if (pos != Npos)
-            return (float)_dictionary.at(pos)->getDouble((double)def);
+        if (const size_t pos = _dictionary.find(key);
+            pos != Npos)
+            return (float)_dictionary.at(pos)->r64((double)def);
         return def;
     }
 
@@ -131,8 +130,8 @@ namespace Rt2::Json
 
     void ObjectType::insert(const String& key, const I64& value)
     {
-        const size_t pos = _dictionary.find(key);
-        if (pos == Npos)
+        if (const size_t pos = _dictionary.find(key);
+            pos == Npos)
             _dictionary.insert(key, new IntegerType(value));
     }
 
@@ -143,34 +142,35 @@ namespace Rt2::Json
 
     void ObjectType::insert(const String& key, const double& value)
     {
-        const size_t pos = _dictionary.find(key);
-        if (pos == Npos)
+        if (const size_t pos = _dictionary.find(key);
+            pos == Npos)
             _dictionary.insert(key, new DoubleType(value));
     }
 
     void ObjectType::insert(const String& key, const bool& value)
     {
-        const size_t pos = _dictionary.find(key);
-        if (pos == Npos)
+        if (const size_t pos = _dictionary.find(key);
+            pos == Npos)
             _dictionary.insert(key, new BoolType(value));
     }
 
-    void ObjectType::insert(const String& key, const void* value)
+    void ObjectType::insert(const String& key,
+                            const void*   value)
     {
-        const size_t pos = _dictionary.find(key);
-        if (pos == Npos)
+        if (const size_t pos = _dictionary.find(key);
+            pos == Npos)
             _dictionary.insert(key, new PointerType(value));
     }
 
-    void ObjectType::getFloatArray(const String& key, float** dest, int max)
+    void ObjectType::floatArray(const String& key, float** dest, int max)
     {
         String str;
-        getValueString(str, key);
+        string(str, key);
 
         StringArray arr;
         Su::splitRejectEmpty(arr, str, ',');
 
-        max = Min<int>(max, arr.size());
+        max = Min<int>(max, (int)arr.size());
 
         if (dest)
         {
@@ -192,7 +192,6 @@ namespace Rt2::Json
                 dest.write(',');
             else
                 first = false;
-
             dest.write('"');
             dest.write(it.first);
             dest.write('"');

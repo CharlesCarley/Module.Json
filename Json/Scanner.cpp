@@ -114,22 +114,22 @@ namespace Rt2::Json
             }
 
             case '[':
-                tok.setType(TokenType::JT_L_BRACE);
+                tok.setType(JT_L_BRACE);
                 return;
             case ']':
-                tok.setType(TokenType::JT_R_BRACE);
+                tok.setType(JT_R_BRACE);
                 return;
             case ',':
-                tok.setType(TokenType::JT_COMMA);
+                tok.setType(JT_COMMA);
                 return;
             case ':':
-                tok.setType(TokenType::JT_COLON);
+                tok.setType(JT_COLON);
                 return;
             case '{':
-                tok.setType(TokenType::JT_L_BRACKET);
+                tok.setType(JT_L_BRACKET);
                 return;
             case '}':
-                tok.setType(TokenType::JT_R_BRACKET);
+                tok.setType(JT_R_BRACKET);
                 return;
             case '\"':
             {
@@ -139,7 +139,7 @@ namespace Rt2::Json
                 if (_data[_pos] == '\"')
                 {
                     ++_pos;
-                    tok.setType(TokenType::JT_STRING);
+                    tok.setType(JT_STRING);
                     return;
                 }
                 _pos = Npos;
@@ -172,8 +172,8 @@ namespace Rt2::Json
 
                 if (ch != 0)
                 {
-                    tok.setType(hasDot ? TokenType::JT_NUMBER
-                                       : TokenType::JT_INTEGER);
+                    tok.setType(hasDot ? JT_NUMBER
+                                       : JT_INTEGER);
                     return;
                 }
                 _pos = Npos;
@@ -186,7 +186,7 @@ namespace Rt2::Json
                 if (Char::equals((const char*)&_data[_pos - 1], "true", 4))
                 {
                     _pos += 3;
-                    tok.setType(TokenType::JT_BOOL);
+                    tok.setType(JT_BOOL);
                     tok.push("true");
                     return;
                 }
@@ -194,7 +194,7 @@ namespace Rt2::Json
                 if (Char::equals((const char*)&_data[_pos - 1], "false", 5) )
                 {
                     _pos += 4;
-                    tok.setType(TokenType::JT_BOOL);
+                    tok.setType(JT_BOOL);
                     tok.push("false");
                     return;
                 }
@@ -202,7 +202,7 @@ namespace Rt2::Json
                 if (Char::equals((const char*)&_data[_pos - 1], "null", 4))
                 {
                     _pos += 3;
-                    tok.setType(TokenType::JT_NULL);
+                    tok.setType(JT_NULL);
                     tok.push("null");
                     return;
                 }

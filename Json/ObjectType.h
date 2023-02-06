@@ -32,7 +32,7 @@ namespace Rt2::Json
     class ObjectType final : public Type
     {
     public:
-        typedef HashTable<String, Type*> Dictionary;
+        using Dictionary = HashTable<String, Type*>;
 
     protected:
         Dictionary _dictionary;
@@ -40,18 +40,22 @@ namespace Rt2::Json
     public:
         ObjectType();
         ~ObjectType() override;
+
         /// <summary>
-        /// Inserts a skJsonType object into the dictionary by the supplied lookup
-        /// key.
+        /// Inserts a Type object into the dictionary with a lookup key.
         /// </summary>
-        /// <param name="key">key should be a unique lookup name within the context of
-        /// this object.</param> <param name="value">value is the value that is to be
+        /// <param name="key">The key parameter should be a unique lookup name
+        /// within the context of this object.</param>
+        /// <param name="value">value is the object that is to be
         /// stored.</param>
         ///
-        /// <code>
-        /// "A" : "Hello World"
-        /// </code>
+        /// <remarks>
         ///
+        /// Represents storage for the following json code fragment
+        /// <code>
+        /// "A" : "Hello World"  => obj->insert("A", new StringType("Hello World"))
+        /// </code>
+        /// </remarks>
         void insert(const String& key, Type* value);
 
         /// <summary>
@@ -150,7 +154,7 @@ namespace Rt2::Json
         /// </summary>
         /// <param name="key">The name of the object to search for.</param>
         /// <returns>The object if the object is found otherwise returns null</returns>
-        Type* getValue(const String& key);
+        Type* find(const String& key);
 
         /// <summary>
         /// Gets the requested string from the dictionary
@@ -159,7 +163,7 @@ namespace Rt2::Json
         /// <param name="key">The key to get</param>
         /// <param name="def">The default value if the key is not found.</param>
         /// <returns>The value for the requested key otherwise def</returns>
-        void getValueString(String& dest, const String& key, const String& def = "");
+        void string(String& dest, const String& key, const String& def = "");
 
         /// <summary>
         /// Gets the requested signed 64-bit integer from the dictionary
@@ -168,7 +172,7 @@ namespace Rt2::Json
         /// <param name="key">The key to get</param>
         /// <param name="def">The default value if the key is not found.</param>
         /// <returns>The value for the requested key otherwise def</returns>
-        void getValueInt(I64& dest, const String& key, const I64& def = -1);
+        void integer(I64& dest, const String& key, const I64& def = -1);
 
         /// <summary>
         /// Gets the requested signed 32-bit integer from the dictionary
@@ -177,7 +181,7 @@ namespace Rt2::Json
         /// <param name="key">The key to get</param>
         /// <param name="def">The default value if the key is not found.</param>
         /// <returns>The value for the requested key otherwise def</returns>
-        void getValueInt(I32& dest, const String& key, const I32& def = -1);
+        void integer(I32& dest, const String& key, const I32& def = -1);
 
         /// <summary>
         /// Gets the requested signed 16-bit integer from the dictionary
@@ -186,7 +190,7 @@ namespace Rt2::Json
         /// <param name="key">The key to get</param>
         /// <param name="def">The default value if the key is not found.</param>
         /// <returns>The value for the requested key otherwise def</returns>
-        void getValueInt(I16& dest, const String& key, const I16& def = -1);
+        void integer(I16& dest, const String& key, const I16& def = -1);
 
         /// <summary>
         /// Gets the requested signed 16-bit integer from the dictionary
@@ -194,10 +198,10 @@ namespace Rt2::Json
         /// <param name="key">The key to get</param>
         /// <param name="def">The default value if the key is not found.</param>
         /// <returns></returns>
-        I16 getInt16(const String& key, const I16& def = -1)
+        I16 i16(const String& key, const I16& def = -1)
         {
             I16 val;
-            getValueInt(val, key, def);
+            integer(val, key, def);
             return val;
         }
 
@@ -207,10 +211,10 @@ namespace Rt2::Json
         /// <param name="key">The key to get</param>
         /// <param name="def">The default value if the key is not found.</param>
         /// <returns></returns>
-        I32 getInt32(const String& key, const I32& def = -1)
+        I32 i32(const String& key, const I32& def = -1)
         {
             I32 val;
-            getValueInt(val, key, def);
+            integer(val, key, def);
             return val;
         }
 
@@ -220,10 +224,10 @@ namespace Rt2::Json
         /// <param name="key">The key to get</param>
         /// <param name="def">The default value if the key is not found.</param>
         /// <returns></returns>
-        I64 getInt64(const String& key, const I64& def = -1)
+        I64 i64(const String& key, const I64& def = -1)
         {
             I64 val;
-            getValueInt(val, key, def);
+            integer(val, key, def);
             return val;
         }
 
@@ -232,21 +236,21 @@ namespace Rt2::Json
         /// </summary>
         /// <param name="key">The key to get</param>
         /// <param name="def">The default value if the key is not found.</param>
-        bool getBoolean(const String& key, bool def = false);
+        bool boolean(const String& key, bool def = false);
 
         /// <summary>
         /// Gets the requested double precision value from the dictionary
         /// </summary>
         /// <param name="key">The key to get</param>
         /// <param name="def">The default value if the key is not found.</param>
-        double getDouble(const String& key, double def = 0.0);
+        double r64(const String& key, double def = 0.0);
 
         /// <summary>
         /// Gets the requested single precision value from the dictionary
         /// </summary>
         /// <param name="key">The key to get</param>
         /// <param name="def">The default value if the key is not found.</param>
-        float getFloat(const String& key, float def = 0.0);
+        float r32(const String& key, float def = 0.0);
 
         /// <summary>
         /// Returns a string representation of the object.
@@ -269,7 +273,7 @@ namespace Rt2::Json
         /// <param name="key"></param>
         /// <param name="dest"></param>
         /// <param name="max"></param>
-        void getFloatArray(const String& key, float** dest, int max);
+        void floatArray(const String& key, float** dest, int max);
 
         Dictionary& dictionary()
         {

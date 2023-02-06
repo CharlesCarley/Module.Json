@@ -24,7 +24,7 @@
 namespace Rt2::Json
 {
     Token::Token() :
-        _type(TokenType::JT_UNDEFINED)
+        _type(JT_UNDEFINED)
     {
     }
 
@@ -40,7 +40,8 @@ namespace Rt2::Json
 
     void Token::clear()
     {
-        _type = TokenType::JT_NULL;
+        _type = JT_NULL;
         _value.clear();
     }
+
 }  // namespace Rt2::Json

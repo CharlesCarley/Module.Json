@@ -34,7 +34,7 @@ namespace Rt2::Json
     class IntegerType;
 
     /// \ingroup Json
-    enum class TokenType
+    enum TokenType
     {
         JT_UNDEFINED,
         JT_COLON,
@@ -67,6 +67,7 @@ namespace Rt2::Json
         /// </summary>
         /// <param name="value">char</param>
         void push(char value);
+
         /// <summary>
         ///
         /// </summary>
@@ -76,33 +77,39 @@ namespace Rt2::Json
         /// <summary>
         ///
         /// </summary>
-        void clear(void);
+        void clear();
 
         /// <summary>
         ///
         /// </summary>
         /// <returns></returns>
-        const String& getValue(void) const
-        {
-            return _value;
-        }
+        const String& value() const;
 
         /// <summary>
         ///
         /// </summary>
         /// <returns></returns>
-        const TokenType& getType(void) const
-        {
-            return _type;
-        }
+        const TokenType& type() const;
 
         /// <summary>
         ///
         /// </summary>
         /// <param name="type">const skJsonTokenType&</param>
-        void setType(const TokenType& type)
-        {
-            _type = type;
-        }
+        void setType(const TokenType& type);
     };
+
+    inline const String& Token::value() const
+    {
+        return _value;
+    }
+
+    inline const TokenType& Token::type() const
+    {
+        return _type;
+    }
+
+    inline void Token::setType(const TokenType& type)
+    {
+        _type = type;
+    }
 }  // namespace Rt2::Json

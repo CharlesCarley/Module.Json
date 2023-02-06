@@ -86,14 +86,14 @@ namespace Rt2::Json
         /// <summary>
         /// Called after an object was parsed in an array
         /// </summary>
-        virtual void objectParsed(void)
+        virtual void objectParsed()
         {
         }
 
         /// <summary>
         /// Called after an array was parsed in an array
         /// </summary>
-        virtual void arrayParsed(void)
+        virtual void arrayParsed()
         {
         }
 

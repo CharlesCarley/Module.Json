@@ -25,17 +25,23 @@
 
 namespace Rt2::Json
 {
-    ArrayType* Type::asArray(void)
+    void Type::setValue(const String& mem)
+    {
+        _value.assign(mem.c_str(), mem.size());
+        notifyStringChanged();
+    }
+
+    ArrayType* Type::asArray()
     {
         if (_type == ARRAY)
-            return reinterpret_cast<ArrayType*>(this);
+            return (ArrayType*)this;
         return nullptr;
     }
 
-    ObjectType* Type::asObject(void)
+    ObjectType* Type::asObject()
     {
         if (_type == OBJECT)
-            return reinterpret_cast<ObjectType*>(this);
+            return (ObjectType*)this;
         return nullptr;
     }
 

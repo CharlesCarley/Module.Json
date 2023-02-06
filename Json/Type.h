@@ -59,7 +59,7 @@ namespace Rt2::Json
         };
 
     protected:
-        /// Raw string value extracted from the .json file
+        /// Raw string value extracted from the .json source
         String _value;
 
         /// Holder for the class type code
@@ -97,21 +97,14 @@ namespace Rt2::Json
         /// Explicitly set the internal string from a memory string
         /// </summary>
         /// <param name="mem">The value to assign to the internal string.</param>
-        void setValue(const String& mem)
-        {
-            _value.assign(mem.c_str(), mem.size());
-            notifyStringChanged();
-        }
+        void setValue(const String& mem);
 
         /// Provides access to the underlying value as a string.
-        const String& getString(void) const
-        {
-            return _value;
-        }
+        const String& string() const;
 
         /// Converts the underlying string to an integer or returns the default
         /// parameter if the internal type is not a INTEGER.
-        I16 getInt16(const I16 defaultValue = -1) const
+        I16 i16(const I16 defaultValue = -1) const
         {
             if (_type == INTEGER)
                 return Char::toInt16(_value, defaultValue);
@@ -120,7 +113,7 @@ namespace Rt2::Json
 
         /// Converts the underlying string to an integer or returns the default
         /// parameter if the internal type is not a INTEGER.
-        I32 getInt32(const I32 defaultValue = -1) const
+        I32 i32(const I32 defaultValue = -1) const
         {
             if (_type == INTEGER)
                 return Char::toInt32(_value, defaultValue);
@@ -129,7 +122,7 @@ namespace Rt2::Json
 
         /// Converts the underlying string to an integer or returns the default
         /// parameter if the internal type is not a INTEGER.
-        I64 getInt64(const I64 defaultValue = -1) const
+        I64 i64(const I64 defaultValue = -1) const
         {
             if (_type == INTEGER)
                 return Char::toInt64(_value, defaultValue);
@@ -138,7 +131,7 @@ namespace Rt2::Json
 
         /// Converts the underlying string to an integer or returns the default
         /// parameter if the internal type is not a INTEGER.
-        U16 getUint16(const U16 defaultValue = -1) const
+        U16 u16(const U16 defaultValue = -1) const
         {
             if (_type == INTEGER)
                 return Char::toUint16(_value, defaultValue);
@@ -147,7 +140,7 @@ namespace Rt2::Json
 
         /// Converts the underlying string to an integer or returns the default
         /// parameter if the internal type is not a INTEGER.
-        U32 getUint32(const U32 defaultValue = -1) const
+        U32 u32(const U32 defaultValue = -1) const
         {
             if (_type == INTEGER)
                 return Char::toUint32(_value, defaultValue);
@@ -156,7 +149,7 @@ namespace Rt2::Json
 
         /// Converts the underlying string to an integer or returns the default
         /// parameter if the internal type is not a INTEGER.
-        U64 getUint64(const U64 defaultValue = -1) const
+        U64 u64(const U64 defaultValue = -1) const
         {
             if (_type == INTEGER)
                 return Char::toUint64(_value, defaultValue);
@@ -165,7 +158,7 @@ namespace Rt2::Json
 
         /// Converts the underlying string to an double or returns the default
         /// parameter if the internal type is not a DOUBLE.
-        double getDouble(const double defaultValue = 0.0) const
+        double r64(const double defaultValue = 0.0) const
         {
             if (_type == DOUBLE)
                 return Char::toDouble(_value);
@@ -175,7 +168,7 @@ namespace Rt2::Json
         /// \brief Converts the underlying string to a bool.
         ///
         /// Returns the default parameter if the internal type is not a BOOLEAN.
-        bool getBoolean(const bool defaultValue = false) const
+        bool boolean(const bool defaultValue = false) const
         {
             if (_type == BOOLEAN)
                 return Char::toBool(_value);
@@ -186,58 +179,37 @@ namespace Rt2::Json
         /// Attempts to cast to an array
         /// </summary>
         /// <returns>skJsonArray or null if the type is not an array</returns>
-        ArrayType* asArray(void);
+        ArrayType* asArray();
 
         /// <summary>
         /// Attempts to cast to an object
         /// </summary>
         /// <returns>skJsonObject or null if the type is not an object</returns>
-        ObjectType* asObject(void);
+        ObjectType* asObject();
 
         /// <returns>true if the type is a string</returns>
-        bool isString(void) const
-        {
-            return _type == STRING;
-        }
+        bool isString() const;
 
         /// <returns>true if the type is an integer </returns>
-        bool isInteger(void) const
-        {
-            return _type == INTEGER;
-        }
+        bool isInteger() const;
 
         /// <returns>true if the type is a double</returns>
-        bool isDouble(void) const
-        {
-            return _type == DOUBLE;
-        }
+        bool isDouble() const;
 
         /// <returns>true if the type is a bool</returns>
-        bool isBoolean(void) const
-        {
-            return _type == BOOLEAN;
-        }
+        bool isBoolean() const;
 
         /// <returns>true if the type is an object</returns>
-        bool isObject(void) const
-        {
-            return _type == OBJECT;
-        }
+        bool isObject() const;
 
         /// <returns>true if the type is an array</returns>
-        bool isArray(void) const
-        {
-            return _type == ARRAY;
-        }
+        bool isArray() const;
 
         /// <summary>
         /// Provides access to the type code
         /// </summary>
         /// <returns> skJsonType::Type</returns>
-        ClassType getType() const
-        {
-            return _type;
-        }
+        ClassType type() const;
 
         /// <returns>Returns a string representation of the object. </returns>
         String toString()
@@ -264,4 +236,44 @@ namespace Rt2::Json
         /// <param name="dest">A destination reference</param>
         virtual void toString(StringBuilder& dest) = 0;
     };
+
+    inline const String& Type::string() const
+    {
+        return _value;
+    }
+
+    inline bool Type::isString() const
+    {
+        return _type == STRING;
+    }
+
+    inline bool Type::isInteger() const
+    {
+        return _type == INTEGER;
+    }
+
+    inline bool Type::isDouble() const
+    {
+        return _type == DOUBLE;
+    }
+
+    inline bool Type::isBoolean() const
+    {
+        return _type == BOOLEAN;
+    }
+
+    inline bool Type::isObject() const
+    {
+        return _type == OBJECT;
+    }
+
+    inline bool Type::isArray() const
+    {
+        return _type == ARRAY;
+    }
+
+    inline Type::ClassType Type::type() const
+    {
+        return _type;
+    }
 }  // namespace Rt2::Json

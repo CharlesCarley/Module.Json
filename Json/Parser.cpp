@@ -20,246 +20,24 @@
 -------------------------------------------------------------------------------
 */
 #include "Parser.h"
-#include "Utils/Stack.h"
 #include "ArrayType.h"
 #include "BoolType.h"
-#include "DoubleType.h"
-#include "IntegerType.h"
+#include "MemoryObjectVisitor.h"
 #include "ObjectType.h"
-#include "PointerType.h"
 #include "Scanner.h"
-#include "StringType.h"
 #include "Token.h"
+#include "Utils/Stack.h"
 #include "Visitor.h"
 
 namespace Rt2::Json
 {
-    /// <summary>
-    /// Default visitor
-    /// Creates type wrappers for parsed json types.
-    /// </summary>
-    class skStoreObjectVisitor final : public Visitor
-    {
-    public:
-        typedef Stack<ObjectType*> ObjectStack;
-        typedef Stack<ArrayType*>  ArrayStack;
-
-    private:
-        Type* _root{nullptr};
-        ObjectStack _objStack{};
-        ArrayStack  _arrStack{};
-        ObjectStack _finishedObjects{};
-        ArrayStack  _finishedArrays{};
-
-    public:
-        skStoreObjectVisitor() = default;
-
-        ~skStoreObjectVisitor() override
-        {
-            clear();
-
-            delete _root;
-            _root = nullptr;
-        }
-
-        void clear()
-        {
-            while (!_arrStack.empty())
-            {
-                delete _arrStack.top();
-                _arrStack.pop();
-            }
-            while (!_objStack.empty())
-            {
-                delete _objStack.top();
-                _objStack.pop();
-            }
-            while (!_finishedObjects.empty())
-            {
-                delete _finishedObjects.top();
-                _finishedObjects.pop();
-            }
-            while (!_finishedObjects.empty())
-            {
-                delete _finishedObjects.top();
-                _finishedObjects.pop();
-            }
-        }
-
-        void parseError(const Token& last) override
-        {
-            Console::writeError("Parse error: ", last.getValue().c_str());
-            clear();
-        }
-
-        Type* root() override
-        {
-            if (!_finishedObjects.empty())
-            {
-                _root = _finishedObjects.top();
-                _finishedObjects.pop();
-            }
-            else if (!_finishedArrays.empty())
-            {
-                _root = _finishedArrays.top();
-                _finishedArrays.pop();
-            }
-            return _root;
-        }
-
-        void arrayCreated() override
-        {
-            _arrStack.push(new ArrayType());
-        }
-
-        void objectCreated() override
-        {
-            _objStack.push(new ObjectType());
-        }
-
-        void objectFinished() override
-        {
-            if (!_objStack.empty())
-            {
-                _finishedObjects.push(_objStack.top());
-                _objStack.pop();
-            }
-        }
-
-        void arrayFinished() override
-        {
-            if (!_arrStack.empty())
-            {
-                _finishedArrays.push(_arrStack.top());
-                _arrStack.pop();
-            }
-        }
-
-        void keyValueParsed(const String&          key,
-                            const TokenType& valueType,
-                            const String&          value) override
-        {
-            if (_objStack.empty())
-            {
-                Con::writeError("no object on the parse stack\n");
-                return;
-            }
-
-            ObjectType* top = _objStack.top();
-
-            Type* obj = nullptr;
-            switch (valueType)
-            {
-            case TokenType::JT_L_BRACE:
-                if (!_finishedArrays.empty())
-                {
-                    obj = _finishedArrays.top();
-                    _finishedArrays.pop();
-                }
-                break;
-            case TokenType::JT_L_BRACKET:
-                if (!_finishedObjects.empty())
-                {
-                    obj = _finishedObjects.top();
-                    _finishedObjects.pop();
-                }
-                break;
-            case TokenType::JT_STRING:
-                obj = new StringType();
-                break;
-            case TokenType::JT_NULL:
-                obj = new PointerType();
-                break;
-            case TokenType::JT_BOOL:
-                obj = new BoolType();
-                break;
-            case TokenType::JT_NUMBER:
-                obj = new DoubleType();
-                break;
-            case TokenType::JT_INTEGER:
-                obj = new IntegerType();
-                break;
-            case TokenType::JT_UNDEFINED:
-            case TokenType::JT_COLON:
-            case TokenType::JT_COMMA:
-            case TokenType::JT_R_BRACE:
-            case TokenType::JT_R_BRACKET:
-                break;
-            }
-
-            if (obj != nullptr)
-                obj->setValue(value);
-            top->insert(key, obj);
-        }
-
-        void handleArrayType(Type* obj, const String& value)
-        {
-            if (obj != nullptr)
-            {
-                obj->setValue(value);
-                auto* arrayObject = _arrStack.top();
-                arrayObject->add(obj);
-            }
-        }
-
-        void objectParsed() override
-        {
-            if (!_arrStack.empty() && !_finishedObjects.empty())
-            {
-                _arrStack.top()->add(_finishedObjects.top());
-                _finishedObjects.pop();
-            }
-        }
-
-        void arrayParsed() override
-        {
-            if (!_arrStack.empty() && !_finishedArrays.empty())
-            {
-                _arrStack.top()->add(_finishedArrays.top());
-                _finishedArrays.pop();
-            }
-        }
-
-        void stringParsed(const String& value) override
-        {
-            if (!_arrStack.empty())
-                handleArrayType(new ArrayType(), value);
-        }
-
-        void integerParsed(const String& value) override
-        {
-            if (!_arrStack.empty())
-                handleArrayType(new IntegerType(), value);
-        }
-
-        void doubleParsed(const String& value) override
-        {
-            if (!_arrStack.empty())
-                handleArrayType(new DoubleType(), value);
-        }
-
-        void booleanParsed(const String& value) override
-        {
-            if (!_arrStack.empty())
-                handleArrayType(new DoubleType(), value);
-        }
-
-        void pointerParsed(const String& value) override
-        {
-            if (!_arrStack.empty())
-            {
-                handleArrayType(new PointerType(), value);
-            }
-        }
-    };
-
 
     Parser::Parser(Visitor* visitor) :
         _visitor(visitor),
         _owns(visitor == nullptr)
     {
         if (_visitor == nullptr)
-            _visitor = new skStoreObjectVisitor();
+            _visitor = new MemoryObjectVisitor();
     }
 
     Parser::~Parser()
@@ -274,12 +52,12 @@ namespace Rt2::Json
         scanner.scan(tok);
 
         Type* root;
-        if (tok.getType() == TokenType::JT_L_BRACKET)
+        if (tok.type() == JT_L_BRACKET)
         {
             parseObject(scanner, tok);
             root = _visitor->root();
         }
-        else if (tok.getType() == TokenType::JT_L_BRACE)
+        else if (tok.type() == JT_L_BRACE)
         {
             parseArray(scanner, tok);
             root = _visitor->root();
@@ -326,57 +104,57 @@ namespace Rt2::Json
         _visitor->objectCreated();
         Token t1, t2;
 
-        while (tok.getType() != TokenType::JT_R_BRACKET)
+        while (tok.type() != JT_R_BRACKET)
         {
             scn.scan(t1);
 
-            if (t1.getType() == TokenType::JT_R_BRACKET)
+            if (t1.type() == JT_R_BRACKET)
             {
                 break;  // empty
             }
 
-            if (t1.getType() != TokenType::JT_STRING)
+            if (t1.type() != JT_STRING)
             {
                 _visitor->parseError(t1);
                 return;
             }
 
             scn.scan(t2);
-            if (t2.getType() != TokenType::JT_COLON)
+            if (t2.type() != JT_COLON)
             {
                 _visitor->parseError(t2);
                 return;
             }
             scn.scan(t2);
 
-            TokenType type = t2.getType();
+            TokenType type = t2.type();
             switch (type)
             {
-            case TokenType::JT_L_BRACE:
+            case JT_L_BRACE:
                 parseArray(scn, t2);
                 break;
-            case TokenType::JT_L_BRACKET:
+            case JT_L_BRACKET:
                 parseObject(scn, t2);
                 break;
-            case TokenType::JT_STRING:
-            case TokenType::JT_NULL:
-            case TokenType::JT_BOOL:
-            case TokenType::JT_NUMBER:
-            case TokenType::JT_INTEGER:
+            case JT_STRING:
+            case JT_NULL:
+            case JT_BOOL:
+            case JT_NUMBER:
+            case JT_INTEGER:
                 break;
-            case TokenType::JT_UNDEFINED:
-            case TokenType::JT_COLON:
-            case TokenType::JT_COMMA:
-            case TokenType::JT_R_BRACE:
-            case TokenType::JT_R_BRACKET:
+            case JT_UNDEFINED:
+            case JT_COLON:
+            case JT_COMMA:
+            case JT_R_BRACE:
+            case JT_R_BRACKET:
                 _visitor->parseError(t2);
                 return;
             }
 
-            _visitor->keyValueParsed(t1.getValue(), type, t2.getValue());
+            _visitor->keyValueParsed(t1.value(), type, t2.value());
 
             scn.scan(tok);
-            if (tok.getType() == TokenType::JT_NULL)
+            if (tok.type() == JT_NULL)
             {
                 _visitor->parseError(tok);
                 return;
@@ -391,56 +169,50 @@ namespace Rt2::Json
         _visitor->arrayCreated();
         Token t1;
 
-        while (tok.getType() != TokenType::JT_R_BRACE)
+        while (tok.type() != JT_R_BRACE)
         {
             scn.scan(t1);
-            if (t1.getType() == TokenType::JT_R_BRACE)
+            switch (t1.type())
             {
-                break;  // empty
-            }
-
-            switch (t1.getType())
-            {
-            case TokenType::JT_L_BRACE:
+            case JT_L_BRACE:
                 parseArray(scn, t1);
                 _visitor->arrayParsed();
                 break;
-            case TokenType::JT_L_BRACKET:
+            case JT_L_BRACKET:
                 parseObject(scn, t1);
                 _visitor->objectParsed();
                 break;
-            case TokenType::JT_STRING:
-                _visitor->stringParsed(t1.getValue());
+            case JT_STRING:
+                _visitor->stringParsed(t1.value());
                 break;
-            case TokenType::JT_NULL:
-                _visitor->pointerParsed(t1.getValue());
+            case JT_NULL:
+                _visitor->pointerParsed(t1.value());
                 break;
-            case TokenType::JT_BOOL:
-                _visitor->booleanParsed(t1.getValue());
+            case JT_BOOL:
+                _visitor->booleanParsed(t1.value());
                 break;
-            case TokenType::JT_NUMBER:
-                _visitor->doubleParsed(t1.getValue());
+            case JT_NUMBER:
+                _visitor->doubleParsed(t1.value());
                 break;
-            case TokenType::JT_INTEGER:
-                _visitor->integerParsed(t1.getValue());
+            case JT_INTEGER:
+                _visitor->integerParsed(t1.value());
                 break;
-            case TokenType::JT_UNDEFINED:
-            case TokenType::JT_COLON:
-            case TokenType::JT_COMMA:
-            case TokenType::JT_R_BRACE:
-            case TokenType::JT_R_BRACKET:
+            case JT_UNDEFINED:
+            case JT_COLON:
+            case JT_COMMA:
+            case JT_R_BRACE:
+            case JT_R_BRACKET:
                 _visitor->parseError(t1);
                 return;
             }
 
             scn.scan(tok);
-            if (tok.getType() == TokenType::JT_NULL)
+            if (tok.type() == JT_NULL)
             {
                 _visitor->parseError(tok);
                 return;
             }
         }
-
         _visitor->arrayFinished();
     }
 }  // namespace Rt2::Json
