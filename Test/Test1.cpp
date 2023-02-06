@@ -12,14 +12,13 @@
 
 using namespace Rt2::Json;
 
-
 GTEST_TEST(Token, Token_001)
 {
     Token tok;
     tok.setType(JT_UNDEFINED);
     tok.push("A");
 
-    EXPECT_TRUE(tok.value()=="A");
+    EXPECT_TRUE(tok.value() == "A");
     EXPECT_EQ(tok.type(), Rt2::Json::TokenType::JT_UNDEFINED);
     tok.clear();
     EXPECT_TRUE(tok.value().empty());
@@ -38,7 +37,7 @@ GTEST_TEST(Token, Token_001)
     tok.push('l');
     tok.push('d');
     tok.push('!');
-    EXPECT_TRUE(tok.value()== ("Hello World!"));
+    EXPECT_TRUE(tok.value() == ("Hello World!"));
     EXPECT_EQ(tok.value().size(), 12);
     EXPECT_LE(tok.value().capacity(), 64);
 }
@@ -55,77 +54,77 @@ GTEST_TEST(Scanner, Scan_001)
 
     scanner.scan(tok);
     EXPECT_EQ(tok.type(), TokenType::JT_STRING);
-    EXPECT_TRUE(tok.value()==("Hello"));
+    EXPECT_TRUE(tok.value() == ("Hello"));
 
     scanner.scan(tok);
     EXPECT_EQ(tok.type(), TokenType::JT_COLON);
 
     scanner.scan(tok);
     EXPECT_EQ(tok.type(), TokenType::JT_STRING);
-    EXPECT_TRUE(tok.value()==("World"));
+    EXPECT_TRUE(tok.value() == ("World"));
 
     scanner.scan(tok);
     EXPECT_EQ(tok.type(), TokenType::JT_COMMA);
 
     scanner.scan(tok);
     EXPECT_EQ(tok.type(), TokenType::JT_STRING);
-    EXPECT_TRUE(tok.value()==("abc"));
+    EXPECT_TRUE(tok.value() == ("abc"));
 
     scanner.scan(tok);
     EXPECT_EQ(tok.type(), TokenType::JT_COLON);
 
     scanner.scan(tok);
     EXPECT_EQ(tok.type(), TokenType::JT_NUMBER);
-    EXPECT_TRUE(tok.value()==("-123.456"));
+    EXPECT_TRUE(tok.value() == ("-123.456"));
 
     scanner.scan(tok);
     EXPECT_EQ(tok.type(), TokenType::JT_COMMA);
 
     scanner.scan(tok);
     EXPECT_EQ(tok.type(), TokenType::JT_STRING);
-    EXPECT_TRUE(tok.value()==("bool0"));
+    EXPECT_TRUE(tok.value() == ("bool0"));
 
     scanner.scan(tok);
     EXPECT_EQ(tok.type(), TokenType::JT_COLON);
 
     scanner.scan(tok);
     EXPECT_EQ(tok.type(), TokenType::JT_BOOL);
-    EXPECT_TRUE(tok.value()==("true"));
+    EXPECT_TRUE(tok.value() == ("true"));
 
     scanner.scan(tok);
     EXPECT_EQ(tok.type(), TokenType::JT_COMMA);
 
     scanner.scan(tok);
     EXPECT_EQ(tok.type(), TokenType::JT_STRING);
-    EXPECT_TRUE(tok.value()==("bool1"));
+    EXPECT_TRUE(tok.value() == ("bool1"));
 
     scanner.scan(tok);
     EXPECT_EQ(tok.type(), TokenType::JT_COLON);
 
     scanner.scan(tok);
     EXPECT_EQ(tok.type(), TokenType::JT_BOOL);
-    EXPECT_TRUE(tok.value()==("false"));
+    EXPECT_TRUE(tok.value() == ("false"));
 
     scanner.scan(tok);
     EXPECT_EQ(tok.type(), TokenType::JT_COMMA);
 
     scanner.scan(tok);
     EXPECT_EQ(tok.type(), TokenType::JT_STRING);
-    EXPECT_TRUE(tok.value()==("null"));
+    EXPECT_TRUE(tok.value() == ("null"));
 
     scanner.scan(tok);
     EXPECT_EQ(tok.type(), TokenType::JT_COLON);
 
     scanner.scan(tok);
     EXPECT_EQ(tok.type(), TokenType::JT_NULL);
-    EXPECT_TRUE(tok.value()==("null"));
+    EXPECT_TRUE(tok.value() == ("null"));
 
     scanner.scan(tok);
     EXPECT_EQ(tok.type(), TokenType::JT_COMMA);
 
     scanner.scan(tok);
     EXPECT_EQ(tok.type(), TokenType::JT_STRING);
-    EXPECT_TRUE(tok.value()==("array"));
+    EXPECT_TRUE(tok.value() == ("array"));
 
     scanner.scan(tok);
     EXPECT_EQ(tok.type(), TokenType::JT_COLON);
@@ -135,28 +134,28 @@ GTEST_TEST(Scanner, Scan_001)
 
     scanner.scan(tok);
     EXPECT_EQ(tok.type(), TokenType::JT_STRING);
-    EXPECT_TRUE(tok.value()==("a"));
+    EXPECT_TRUE(tok.value() == ("a"));
 
     scanner.scan(tok);
     EXPECT_EQ(tok.type(), TokenType::JT_COMMA);
 
     scanner.scan(tok);
     EXPECT_EQ(tok.type(), TokenType::JT_INTEGER);
-    EXPECT_TRUE(tok.value()==("1"));
+    EXPECT_TRUE(tok.value() == ("1"));
 
     scanner.scan(tok);
     EXPECT_EQ(tok.type(), TokenType::JT_COMMA);
 
     scanner.scan(tok);
     EXPECT_EQ(tok.type(), TokenType::JT_BOOL);
-    EXPECT_TRUE(tok.value()==("false"));
+    EXPECT_TRUE(tok.value() == ("false"));
 
     scanner.scan(tok);
     EXPECT_EQ(tok.type(), TokenType::JT_COMMA);
 
     scanner.scan(tok);
     EXPECT_EQ(tok.type(), TokenType::JT_NULL);
-    EXPECT_TRUE(tok.value()==("null"));
+    EXPECT_TRUE(tok.value() == ("null"));
 
     scanner.scan(tok);
     EXPECT_EQ(tok.type(), TokenType::JT_R_BRACE);
@@ -183,7 +182,7 @@ GTEST_TEST(Parser, Parse_001)
     Type* type = obj->find("Hello");
     EXPECT_NE(type, nullptr);
     EXPECT_EQ(type->type(), Type::Type::STRING);
-    EXPECT_TRUE(type->string()==("World"));
+    EXPECT_TRUE(type->string() == ("World"));
 
     EXPECT_TRUE(obj->hasKey("abc"));
 
@@ -209,7 +208,7 @@ void Test3ValidateObject(ObjectType* nObj, bool testArray)
     }
 
     const Rt2::String& a = nObj->find("A")->string();
-    EXPECT_TRUE(a==("String"));
+    EXPECT_TRUE(a == ("String"));
 
     const bool c = nObj->find("C")->boolean();
     EXPECT_TRUE(c);
@@ -286,7 +285,7 @@ GTEST_TEST(Parser, Parse_003)
     EXPECT_EQ(3, arr->i16(3));
     EXPECT_EQ(4, arr->i16(4));
     EXPECT_EQ(5, arr->i16(5));
-    EXPECT_TRUE(arr->at(6)->string()==("Hello"));
+    EXPECT_TRUE(arr->at(6)->string() == ("Hello"));
 }
 
 GTEST_TEST(Parser, ToString_001)
@@ -298,14 +297,14 @@ GTEST_TEST(Parser, ToString_001)
     obj.toString(actual);
 
     const Rt2::String expected1 = R"({"a":123})";
-    EXPECT_TRUE(expected1==(actual));
+    EXPECT_TRUE(expected1 == (actual));
 
     obj.insert("b", 456);
     obj.insert("c", 789);
 
     const Rt2::String expected2 = R"({"a":123,"b":456,"c":789})";
     obj.toString(actual);
-    EXPECT_TRUE(expected2==(actual));
+    EXPECT_TRUE(expected2 == (actual));
 
     Parser parser;
     Type*  type = parser.parse(expected2.c_str(), expected2.size());
@@ -336,7 +335,7 @@ GTEST_TEST(Parser, ToString_002)
     obj.toString(actual);
 
     const Rt2::String expected1 = "[0,1,2,3,4,5]";
-    EXPECT_TRUE(expected1==(actual));
+    EXPECT_TRUE(expected1 == (actual));
 
     obj.add(6);
     obj.add(7);
@@ -345,7 +344,7 @@ GTEST_TEST(Parser, ToString_002)
 
     const Rt2::String expected2 = "[0,1,2,3,4,5,6,7,8,9]";
     obj.toString(actual);
-    EXPECT_TRUE(expected2==(actual));
+    EXPECT_TRUE(expected2 == (actual));
 
     Parser parser;
     Type*  type = parser.parse(expected2.c_str(), expected2.size());
@@ -418,4 +417,19 @@ GTEST_TEST(Parser, Parse_Reflection)
     Test3Validate(rp2->asArray());
 }
 
+GTEST_TEST(Parser, Empty)
+{
+    Parser parser;
 
+    Rt2::String text = "{}";
+
+    Type* a = parser.parse(text.c_str(), text.size());
+    EXPECT_NE(nullptr, a);
+    EXPECT_EQ(a->type(), Type::OBJECT);
+
+    text = "[]";
+    Type* b = parser.parse(text.c_str(), text.size());
+    EXPECT_NE(nullptr, b);
+    EXPECT_EQ(b->type(), Type::ARRAY);
+
+}

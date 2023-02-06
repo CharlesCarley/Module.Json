@@ -172,6 +172,9 @@ namespace Rt2::Json
         while (tok.type() != JT_R_BRACE)
         {
             scn.scan(t1);
+            if (t1.type() == JT_R_BRACE)
+                break;  // empty
+
             switch (t1.type())
             {
             case JT_L_BRACE:
