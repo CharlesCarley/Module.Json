@@ -74,7 +74,7 @@ namespace Rt2::Json
 
         if (!scn.isOpen())
         {
-            Con::writeError("failed to open the supplied file: ", path.c_str());
+            Console::writeError("failed to open the supplied file: ", path.c_str());
             return nullptr;
         }
         return parseCommon(scn);
@@ -93,7 +93,7 @@ namespace Rt2::Json
 
         if (!scn.isOpen())
         {
-            Con::writeError("failed to open the supplied memory file");
+            Console::writeError("failed to open the supplied memory file");
             return nullptr;
         }
         return parseCommon(scn);
