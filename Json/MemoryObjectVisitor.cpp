@@ -120,7 +120,7 @@ namespace Rt2::Json
     {
         if (_objStack.empty())
         {
-            Con::writeError("no object on the parse stack\n");
+            Console::writeError("no object on the parse stack\n");
             return;
         }
 
