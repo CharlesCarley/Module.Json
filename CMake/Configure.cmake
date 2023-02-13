@@ -1,3 +1,8 @@
+include(GitUpdate)
+if (NOT GitUpdate_SUCCESS)
+    return()
+endif()
+
 include(StaticRuntime)
 include(ExternalTarget)
 

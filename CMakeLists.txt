@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.15)
 project(Json)
+
 # Use C++-17 by default.
 enable_language(CXX)
 set(CMAKE_CXX_STANDARD 17)
@@ -13,7 +14,10 @@ list(APPEND
     ${Json_SOURCE_DIR}/CMake/Modules  # (generic)  Global to all projects
 )
 
-include(${Json_SOURCE_DIR}/CMake/Configure.cmake)
+include(Configure)
+if (NOT Configure_SUCCEEDED)
+   return()
+endif()
 
 if (Json_ExternalTarget)
     set(TargetFolders ${Json_TargetFolders})
